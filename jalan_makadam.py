@@ -85,4 +85,3 @@ def jalan_makadam_flow():
 
 if __name__ == "__main__":
     st.title("Estimasi RAB")
-    jalan_makadam_flow()
