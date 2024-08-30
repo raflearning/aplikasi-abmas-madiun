@@ -19,10 +19,10 @@ def jalan_makadam_flow():
 
         panjang = st.number_input("Panjang Galian (m)", value=0)
         lebar = st.number_input("Lebar Galian (m)", value=0)
-        kedalaman = st.radio("Kedalaman Makadam", ["≤ 1 m", "> 1 m sampai < 2m"])
+        kedalaman = st.number_input("Kedalaman Makadam", value=0)
 
         if st.button("Konfirmasi Galian", key="konfirmasi_galian"):
-            if panjang == 0 or lebar == 0 or kedalaman == "":
+            if panjang == 0 or lebar == 0 or kedalaman == 0:
                 st.error("Mohon masukkan panjang, lebar, dan kedalaman yang valid sebelum melanjutkan.")
             else:
                 st.session_state.jalan_makadam.update({
@@ -66,6 +66,7 @@ def jalan_makadam_flow():
                 'Lebar (m)': [st.session_state.jalan_makadam.get('lebar_galian'), st.session_state.jalan_makadam.get('lebar_urugan')],
                 'Kedalaman': [st.session_state.jalan_makadam.get('kedalaman_galian'), '']
             }
+            
 
             df = pd.DataFrame(data)
 
