@@ -66,6 +66,7 @@ def jalan_makadam_flow():
                 'Lebar (m)': [st.session_state.jalan_makadam.get('lebar_galian'), st.session_state.jalan_makadam.get('lebar_urugan')],
                 'Kedalaman': [st.session_state.jalan_makadam.get('kedalaman_galian'), '']
             }
+            
 
             df = pd.DataFrame(data)
 
