@@ -5,6 +5,9 @@ from io import BytesIO
 def jalan_makadam_flow():
     st.subheader("Jalan Makadam")
 
+    # Menambahkan 3 kolom untuk gambar di bagian atas
+    st.image("jalan makadam 1.jpg", caption="1", use_column_width=True)
+
     if st.button("Mulai Input"):
         st.session_state.jalan_makadam = {}
         st.session_state.show_galian_input = True
