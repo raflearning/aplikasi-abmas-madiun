@@ -5,6 +5,18 @@ from io import BytesIO
 def jalan_beton_flow():
     st.subheader("Jalan Beton")
 
+    # Menambahkan 3 kolom untuk gambar di bagian atas
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.image("jalan beton 1.jpg", caption="1", use_column_width=True)
+
+    with col2:
+        st.image("jalan beton 2.jpg", caption="2", use_column_width=True)
+
+    with col3:
+        st.image("jalan beton 3.jpg", caption="3", use_column_width=True)
+
     if st.button("Mulai Input"):
         st.session_state.jalan_beton = {}
         st.session_state.show_galian_input = True
