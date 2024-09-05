@@ -18,7 +18,7 @@ def jalan_makadam_flow():
     if st.session_state.get('show_galian_input', False):
         st.write("### Pekerjaan Galian")
         jenis_galian = st.selectbox("Jenis Galian", ["Galian Batu", "Galian Tanah", "Galian Lumpur", "Galian Pasir", "Galian Cadas"])
-        metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis"])
+        metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"])
 
         panjang = st.number_input("Panjang Galian (m)", value=0)
         lebar = st.number_input("Lebar Galian (m)", value=0)
