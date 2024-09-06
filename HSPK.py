@@ -25,6 +25,17 @@ HSPK_BAMBU = 35000
 HSPK_MULTIPLEKS = 180800
 HSPK_KAYU_BEKISTING = 3499200
 HSPK_MINYAK_BEKISTING = 5650
+HSPK_BAJA_TULANGAN_POLOS = 11700
+HSPK_JOINT_SEALENT = 42000
+HSPK_CAT_ANTI_KARAT = 79100
+HSPK_EXPANSION_CAP = 7400
+HSPK_POLYTENE_125_MIKRON = 27250
+HSPK_CURING_COMPOUND = 51100
+HSPK_FORMWORK_PLATE = 45000
+HSPK_PAKU = 600
+HSPK_ADDITIVE = 44250
+HSPK_KAYU_ACUAN = 3171350
+HSPK_SEMEN_40KG = 102500
 
 # HPSK_peralatan
 HSPK_EXCAVATOR = 819402.32
@@ -34,8 +45,14 @@ HSPK_JACK_HAMMER = 38465.57
 HSPK_COMPRESSOR = 212427.45
 HSPK_MESIN_POMPA_LUMPUR = 339211000
 HSPK_CONCRET_PUMP = 611800
-
-
+HSPK_STAMPER = 26050
+HSPK_BULLDOZER = 876843.85
+HSPK_WATER_TANKER = 317296.73
+HSPK_ROLLER_VIBRATOR = 465580
+HSPK_VIBRATOR_ROLLER = 346350
+HSPK_TRUK_MIXER = 687737.92
+HSPK_CONCRETE_VIBRATOR = 50126.81
+HSPK_SLIP_FORM_PAVER = 636817.51
 
 # Galian dengan Excavator
 # Galian Tanah dengan Excavator
@@ -51,7 +68,7 @@ class GalianTanahDenganExcavator:
         self.pekerja = 0.0414 * HSPK_PEKERJA * self.volume_galian
         self.mandor = 0.0041 * HSPK_MANDOR * self.volume_galian
 
-    def peralatan(self):
+    def peralatan(self)
         self.excavator = 0.0414 * HSPK_EXCAVATOR * self.volume_galian
     
     def ahsp_galian_tanah_dengan_excavator(self):
@@ -113,7 +130,7 @@ class GalianBiasaDenganExcavator:
         self.pekerja = 0.0073 * HSPK_PEKERJA * self.volume_galian
         self.mandor = 0.0037 * HSPK_MANDOR * self.volume_galian
 
-    def peralatan(self, excavator, dump_truck):
+    def peralatan(self, excavator, dump_truck)
         self.excavator = 0.0256 * HSPK_EXCAVATOR *self. volume_galian
         self.dump_truck = 0.2972 * HSPK_DUMP_TRUCK * self.volume_galian
 
@@ -512,7 +529,7 @@ class GalianTanahCadasManual:
 KOEFISIEN_GALIAN_TANAH_CADAS_SEMI_MEKANIS  = {
     'galian_1m' : {
         'pekerja' : 0.32,
-        'mandor' : 0.2,
+        'mandor' : 0.0.2,
         'pertamina_dex' : 0.125,
         'jack_hammer' : 0.125
     },
@@ -1200,3 +1217,195 @@ class BekistingKolom:
             'minyak_bekisting' : self.minyak_bekisting,
             'ahsp_total' : self.ahsp_total
         }
+
+# Pemadatan
+# Urugan Tanah Kembali (Drainase)
+class UruganTanahKembali:
+    def __init__(self, panjang_pemadatan, lebar_pemadatan, kedalaman_pemadatan):
+        self.pekerja = None
+        self.mandor = None
+        self.tukang = None
+        self.ahsp_total = None
+        self.volume_pemadatan = panjang_pemadatan * lebar_pemadatan * kedalaman_pemadatan
+
+    def tenaga(self):
+        self.pekerja = 0.226 * HSPK_PEKERJA * self.volume_pemadatan
+        self.mandor = 0.007 * HSPK_MANDOR * self.volume_pemadatan
+        self.tukang = 0.0062 * HSPK_TUKANG * self.volume_pemadatan
+
+    def ahsp_urugan_tanah_kembali(self):
+        self.ahsp_total = self.tenaga()
+    
+    def galian_urugan_tanah_kembali(self):
+        self.tenaga()
+        self.ahsp_urugan_tanah_kembali()
+        return {
+            'pekerja' : self.pekerja,
+            'mandor' : self.mandor,
+            'tukang' : self.tukang,
+            'ahsp_total' : self.ahsp_total
+        }
+# Pemadatan Tanah dengan Stamper
+class PemadatanTanahDenganStamper:
+    def __init__(self, panjang_pemadatan, lebar_pemadatan, kedalaman_pemadatan):
+        self.pekerja = None
+        self.mandor = None
+        self.tukang = None
+        self.ahsp_total = None
+        self.volume_pemadatan = panjang_pemadatan * lebar_pemadatan * kedalaman_pemadatan
+
+    def tenaga(self):
+        self.pekerja = 0.062 * HSPK_PEKERJA * self.volume_pemadatan
+        self.mandor = 0.186 * HSPK_MANDOR * self.volume_pemadatan
+        self.tukang = 0.0062 * HSPK_TUKANG * self.volume_pemadatan
+    
+    def peralatan(self):
+        self.stamper = 0.05 * HSPK_STAMPER * self.volume_pemadatan
+
+    def ahsp_pemadatan_tanah_dengan_stamper(self):
+        self.ahsp_total = self.tenaga() + self.peralatan()
+    
+    def pemadatan_tanah_dengan_stamper(self):
+        self.tenaga()
+        self.peralatan()
+        self.ahsp_pemadatan_tanah_dengan_stamper()
+        return {
+            'pekerja' : self.pekerja,
+            'mandor' : self.mandor,
+            'tukang' : self.tukang,
+            'stamper' : self.stamper,
+            'ahsp_total' : self.ahsp_total
+        }
+# Pemadatan Tanah dengan Bulldozer
+class PemadatanTanahDenganBulldozer:
+    def __init__(self, panjang_pemadatan, lebar_pemadatan, kedalaman_pemadatan):
+        self.pekerja = None
+        self.mandor = None
+        self.tukang = None
+        self.bulldozer = None
+        self.water_tanker = None
+        self.roller_vibrator = None
+        self.ahsp_total = None
+        self.volume_pemadatan = panjang_pemadatan * lebar_pemadatan * kedalaman_pemadatan
+
+    def tenaga(self):
+        self.pekerja = 0.062 * HSPK_PEKERJA * self.volume_pemadatan
+        self.mandor = 0.186 * HSPK_MANDOR * self.volume_pemadatan
+        self.tukang = 0.0062 * HSPK_TUKANG * self.volume_pemadatan
+    
+    def peralatan(self):
+        self.bulldozer = 0.02 * HSPK_BULLDOZER * self.volume_pemadatan
+        self.water_tanker = 0.0078 * HSPK_WATER_TANKER * self.volume_pemadatan
+        self.roller_vibrator = 0.0178 * HSPK_ROLLER_VIBRATOR * self.volume_pemadatan
+
+    def ahsp_pemadatan_tanah_dengan_bulldozer(self):
+        self.ahsp_total = self.tenaga() + self.peralatan()
+    
+    def pemadatan_dengan_stamper(self):
+        self.tenaga()
+        self.peralatan()
+        self.ahsp_pemadatan_tanah_dengan_bulldozer()
+        return {
+            'pekerja' : self.pekerja,
+            'mandor' : self.mandor,
+            'tukang' : self.tukang,
+            'bulldozer' : self.bulldozer,
+            'water_tanker' : self.water_tanker,
+            'roller_vibrator' : self.roller_vibrator,
+            'ahsp_total' : self.ahsp_total
+        }
+# Pemadatan Beton dengan Vibrator
+class PemadatanBetonDenganVibrator:
+    def __init__(self, panjang_pemadatan, lebar_pemadatan, kedalaman_pemadatan):
+        self.pekerja = None
+        self.mandor = None
+        self.vibrator_roller = None
+        self.ahsp_total = None
+        self.volume_pemadatan = panjang_pemadatan * lebar_pemadatan * kedalaman_pemadatan
+
+    def tenaga(self):
+        self.pekerja = 0.25 * HSPK_PEKERJA * self.volume_pemadatan
+        self.mandor = 0.025 * HSPK_MANDOR * self.volume_pemadatan
+    
+    def peralatan(self):
+        self.vibrator_roller = 0.1 * HSPK_VIBRATOR_ROLLER * self.volume_pemadatan
+
+    def ahsp_pemadatan_beton_dengan_vibrator(self):
+        self.ahsp_total = self.tenaga() + self.peralatan()
+    
+    def pemadatan_dengan_stamper(self):
+        self.tenaga()
+        self.peralatan()
+        self.ahsp_pemadatan_beton_dengan_vibrator()
+        return {
+            'pekerja' : self.pekerja,
+            'mandor' : self.mandor,
+            'vibrator_roller' : self.vibrator_roller,
+            'ahsp_total' : self.ahsp_total
+        }
+# Pemadatan Beton Manual
+class PemadatanBetonManual:
+    def __init__(self, panjang_pemadatan, lebar_pemadatan, kedalaman_pemadatan):
+        self.pekerja = None
+        self.mandor = None
+        self.ahsp_total = None
+        self.volume_pemadatan = panjang_pemadatan * lebar_pemadatan * kedalaman_pemadatan
+
+    def tenaga(self):
+        self.pekerja = 0.25 * HSPK_PEKERJA * self.volume_pemadatan
+        self.mandor = 0.025 * HSPK_MANDOR * self.volume_pemadatan
+
+    def ahsp_pemadatan_beton_manual(self):
+        self.ahsp_total = self.tenaga() + self.peralatan()
+    
+    def pemadatan_beton_manual(self):
+        self.tenaga()
+        self.ahsp_pemadatan_beton_manual()
+        return {
+            'pekerja' : self.pekerja,
+            'mandor' : self.mandor,
+            'ahsp_total' : self.ahsp_total
+        }
+    
+# Perkerasan
+# Perkerasan Beton Semen
+class PerkerasanBetonSemen:
+    def __init__(self, panjang_beton, lebar_beton, tebal_beton):
+        self.pekerja = None
+        self.tukang = None
+        self.mandor = None
+        self.semen
+        self.ahsp_total = None
+        self.volume_bekisting_kolom = panjang_beton * lebar_beton * tebal_beton
+
+    def tenaga(self):
+        self.pekerja = self.hspk_multipleks['pekerja'] * HSPK_PEKERJA * self.luas_bekisting_kolom
+        self.tukang = self.hspk_multipleks['koefisien_tukang'] * HSPK_TUKANG * self.luas_bekisting_kolom
+        self.kepala_tukang = self.hspk_multipleks['kepala_tukang'] * HSPK_KEPALA_TUKANG * self.luas_bekisting_kolom
+        self.mandor = self.hspk_multipleks['mandor'] * HSPK_MANDOR * self.luas_bekisting_kolom
+
+    def bahan(self):
+        self.multipleks = self.hspk_multipleks['multipleks'] * HSPK_MULTIPLEKS * self.luas_bekisting_kolom
+        self.kayu_bekisting = self.hspk_multipleks['kayu_bekisting'] * HSPK_KAYU_BEKISTING * self.luas_bekisting_kolom
+        self.paku_biasa = self.hspk_multipleks['paku_biasa'] * HSPK_PAKU_BIASA * self.luas_bekisting_kolom
+        self.minyak_bekisting = self.hspk_multipleks['minyak_bekisting'] * HSPK_MINYAK_BEKISTING * self.luas_bekisting_kolom
+    
+    def bekisting_kolom(self) :
+        self.ahsp_total = self.tenaga() + self.bahan()
+
+    def ahsp_bekisting_kolom(self):
+        self.tenaga()
+        self.bahan()
+        self.bekisting_kolom()
+        return {
+            'pekerja': self.pekerja,
+            'tukang': self.tukang,
+            'kepala_tukang' : self.kepala_tukang,
+            'mandor' : self.mandor,
+            'multipleks' : self.multipleks,
+            'kayu_bekisting' : self.paku_biasa,
+            'paku_biasa' : self.paku_biasa,
+            'minyak_bekisting' : self.minyak_bekisting,
+            'ahsp_total' : self.ahsp_total
+        }
+# Perkerasan Jalan Beton
