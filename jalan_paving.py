@@ -18,9 +18,9 @@ def jalan_paving_flow():
         jenis_galian = st.selectbox("Jenis Galian", ["Galian Batu", "Galian Tanah", "Galian Lumpur", "Galian Pasir", "Galian Cadas"])
         metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"])
 
-        panjang = st.number_input("Panjang Galian (m)")
-        lebar = st.number_input("Lebar Galian (m)")
-        kedalaman = st.number_input("Kedalaman Galian (m)", min_value=0.0, max_value=1.0, value=0.0, step=0.01)
+        panjang = st.number_input("Panjang Galian (m)", format="%.2f", )
+        lebar = st.number_input("Lebar Galian (m)", format="%.2f")
+        kedalaman = st.number_input("Kedalaman Galian (cm)", format="%d", max_value=100)
 
         if st.button("Konfirmasi Galian", key="konfirmasi_galian"):
             if panjang == 0 or lebar == 0:
@@ -40,9 +40,10 @@ def jalan_paving_flow():
     # Bagian Urugan
     if st.session_state.get('show_urugan_input', False):
         st.write("### Pekerjaan Urugan")
-        panjang_urugan = st.number_input("Panjang Urugan (m)")
-        lebar_urugan = st.number_input("Lebar Urugan (m)")
-        kedalaman_urugan = st.number_input("Kedalaman Urugan (m)", min_value=0.0, max_value=1.0, value=0.0, step=0.01)
+        panjang_urugan = st.number_input("Panjang Urugan (m)", format="%.2f")
+        lebar_urugan = st.number_input("Lebar Urugan (m)", format="%.2f")
+        kedalaman_urugan = st.number_input("Kedalaman Urugan (cm)", format="%d", max_value=100)
+        pemadatan_urugan = st.selectbox("Jenis Pemadatan", ["Stamper", "Bulldozer"])
 
         if st.button("Konfirmasi Urugan", key="konfirmasi_urugan"):
             if panjang_urugan == 0 or lebar_urugan == 0:
@@ -52,6 +53,7 @@ def jalan_paving_flow():
                     'panjang_urugan': panjang_urugan,
                     'lebar_urugan': lebar_urugan,
                     'kedalaman_urugan': lebar_urugan,
+                    'pemadatan_urugan': pemadatan_urugan,
                 })
                 st.success("Input Urugan disimpan! Lanjutkan ke Pemasangan Paving.")
                 st.session_state.show_paving_input = True
@@ -60,14 +62,16 @@ def jalan_paving_flow():
     # Pemasangan Paving: This step is mandatory after both Galian and Urugan
     if st.session_state.get('show_paving_input', False):
         st.write("### Pemasangan Paving")
-        panjang_paving = st.number_input("Panjang Daerah Paving (m)")
-        lebar_paving = st.number_input("Lebar Daerah Galian (m)")
+        panjang_paving = st.number_input("Panjang Daerah Paving (m)", format="%.2f", )
+        lebar_paving = st.number_input("Lebar Daerah Paving (m)", format="%.2f")
+        jenis_paving = st.selectbox("Jenis Paving", ["Paving Berwarna", "Paving Natural"])
         ketebalan_paving = st.selectbox("Ketebalan Paving", ["6 cm", "8 cm"])
 
         if st.button("Konfirmasi Pemasangan Paving", key="Konfirmasi_Pemasangan_Paving"):
             st.session_state.jalan_paving.update({
                 'panjang_paving': panjang_paving,
                 'lebar_paving': lebar_paving,
+                'Jenis_paving': jenis_paving,
                 'ketebalan_paving': ketebalan_paving,
             })
             st.success("Input Paving disimpan! Tekan tombol Submit untuk menyimpan semua data.")
@@ -82,12 +86,13 @@ def jalan_paving_flow():
         if st.button("Ekspor ke Excel"):
             data = {
                 'Pekerjaan': ['Galian', 'Urugan', 'Pemasangan Paving'],
-                'Jenis': [st.session_state.jalan_paving.get('jenis_galian'), '', ''],
+                'Jenis': [st.session_state.jalan_paving.get('jenis_galian'), '', st.session_state.jalan_paving.get('jenis_paving')],
                 'Metode': [st.session_state.jalan_paving.get('metode'), '', ''],
                 'Panjang (m)': [st.session_state.jalan_paving.get('panjang_galian'), st.session_state.jalan_paving.get('panjang_urugan'), st.session_state.jalan_paving.get('panjang_paving')],
                 'Lebar (m)': [st.session_state.jalan_paving.get('lebar_galian'), st.session_state.jalan_paving.get('lebar_urugan'), st.session_state.jalan_paving.get('lebar_paving')],
                 'Kedalaman': [st.session_state.jalan_paving.get('kedalaman_galian'), st.session_state.jalan_paving.get('kedalaman_urugan'), ''],
                 'Ketebalan Paving': ['', '', st.session_state.jalan_paving.get('ketebalan_paving')],
+                'Pemadatan': ['', st.session_state.jalan_paving.get('pemadatan_urugan'), ''],
             }
 
             df = pd.DataFrame(data)
