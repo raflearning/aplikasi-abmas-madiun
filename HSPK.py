@@ -68,7 +68,7 @@ class GalianTanahDenganExcavator:
         self.pekerja = 0.0414 * HSPK_PEKERJA * self.volume_galian
         self.mandor = 0.0041 * HSPK_MANDOR * self.volume_galian
 
-    def peralatan(self)
+    def peralatan(self):
         self.excavator = 0.0414 * HSPK_EXCAVATOR * self.volume_galian
     
     def ahsp_galian_tanah_dengan_excavator(self):
@@ -130,7 +130,7 @@ class GalianBiasaDenganExcavator:
         self.pekerja = 0.0073 * HSPK_PEKERJA * self.volume_galian
         self.mandor = 0.0037 * HSPK_MANDOR * self.volume_galian
 
-    def peralatan(self, excavator, dump_truck)
+    def peralatan(self, excavator, dump_truck):
         self.excavator = 0.0256 * HSPK_EXCAVATOR *self. volume_galian
         self.dump_truck = 0.2972 * HSPK_DUMP_TRUCK * self.volume_galian
 
@@ -532,7 +532,7 @@ class GalianTanahCadasManual:
 KOEFISIEN_GALIAN_TANAH_CADAS_SEMI_MEKANIS  = {
     'galian_1m' : {
         'pekerja' : 0.32,
-        'mandor' : 0.0.2,
+        'mandor' : 0.2,
         'pertamina_dex' : 0.125,
         'jack_hammer' : 0.125
     },

@@ -68,7 +68,7 @@ def jalan_paving_flow():
         st.write("### Pekerjaan Urugan")
         panjang_urugan = st.number_input("Panjang Urugan (m)", format="%.2f")
         lebar_urugan = st.number_input("Lebar Urugan (m)", format="%.2f")
-        kedalaman_urugan = st.number_input("Kedalaman Urugan (m)", format="%d", max_value=10.00)
+        kedalaman_urugan = st.number_input("Kedalaman Urugan (m)", format="%.2f")
         pemadatan_urugan = st.selectbox("Jenis Pemadatan", ["Stamper", "Bulldozer"])
 
         if st.button("Konfirmasi Urugan", key="konfirmasi_urugan"):
