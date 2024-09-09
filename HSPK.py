@@ -190,12 +190,12 @@ KOEFISIEN_GALIAN_TANAH_BIASA_MANUAL = {
     }
 }
 class GalianTanahBiasaManual:
-    def __init__(self, panjang_galian, lebar_galian, kedalaman_galian):
+    def __init__(self, panjang_galian, lebar_galian, kedalaman_galian, tipe_koefisien):
         self.pekerja = None
         self.mandor = None
         self.ahsp_total = None
         self.volume_galian = panjang_galian * lebar_galian * kedalaman_galian
-        self.koefisien_galian = KOEFISIEN_GALIAN_TANAH_BIASA_MANUAL[kedalaman_galian]
+        self.koefisien_galian = KOEFISIEN_GALIAN_TANAH_BIASA_MANUAL[tipe_koefisien]
 
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
@@ -383,29 +383,32 @@ KOEFISIEN_GALIAN_BATU_MANUAL  = {
         'mandor' : 0.0075
     }
 }
+
 class GalianBatuManual:
-    def __init__(self, panjang_galian, lebar_galian, kedalaman_galian):
+    def __init__(self, panjang, lebar, kedalaman, tipe_koefisien):
         self.pekerja = None
         self.mandor = None
         self.ahsp_total = None
-        self.volume_galian = panjang_galian * lebar_galian * kedalaman_galian
-        self.koefisien_galian = KOEFISIEN_GALIAN_BATU_MANUAL[kedalaman_galian]
+        self.volume_galian = kedalaman
+        self.koefisien_galian = KOEFISIEN_GALIAN_BATU_MANUAL[tipe_koefisien]
 
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
 
     def ahsp_galian_batu_manual(self):
-        self.ahsp_total = self.tenaga()
-    
+        self.tenaga()
+        self.ahsp_total = self.pekerja + self.mandor
+
     def galian_batu_manual(self):
         self.tenaga()
         self.ahsp_galian_batu_manual()
         return {
-            'pekerja' : self.pekerja,
-            'mandor' : self.mandor,
-            'ahsp_total' : self.ahsp_total
+            'pekerja': self.pekerja,
+            'mandor': self.mandor,
+            'ahsp_total': self.ahsp_total
         }
+
 
 # Galian Batu Semi Mekanis
 KOEFISIEN_GALIAN_BATU_SEMI_MEKANIS  = {

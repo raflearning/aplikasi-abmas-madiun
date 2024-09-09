@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from io import BytesIO
+import HSPK
 
 def jalan_paving_flow():
     st.subheader("Jalan Paving")
@@ -27,9 +28,25 @@ def jalan_paving_flow():
         jenis_galian = st.selectbox("Jenis Galian", ["Galian Batu", "Galian Tanah", "Galian Lumpur", "Galian Pasir", "Galian Cadas"])
         metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"])
 
-        panjang = st.number_input("Panjang Galian (m)", format="%.2f", )
+        panjang = st.number_input("Panjang Galian (m)", format="%.2f")
         lebar = st.number_input("Lebar Galian (m)", format="%.2f")
-        kedalaman = st.number_input("Kedalaman Galian (cm)", format="%d", max_value=100)
+        kedalaman = st.number_input("Kedalaman Galian (m)", format="%.2f")
+
+
+        if jenis_galian == "Galian Batu" and metode == "Manual":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_batu_manual = HSPK.GalianBatuManual(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_batu_manual.galian_batu_manual()
+            print(rab_galian)
+
 
         if st.button("Konfirmasi Galian", key="konfirmasi_galian"):
             if panjang == 0 or lebar == 0:
@@ -51,7 +68,7 @@ def jalan_paving_flow():
         st.write("### Pekerjaan Urugan")
         panjang_urugan = st.number_input("Panjang Urugan (m)", format="%.2f")
         lebar_urugan = st.number_input("Lebar Urugan (m)", format="%.2f")
-        kedalaman_urugan = st.number_input("Kedalaman Urugan (cm)", format="%d", max_value=100)
+        kedalaman_urugan = st.number_input("Kedalaman Urugan (m)", format="%d", max_value=10.00)
         pemadatan_urugan = st.selectbox("Jenis Pemadatan", ["Stamper", "Bulldozer"])
 
         if st.button("Konfirmasi Urugan", key="konfirmasi_urugan"):
