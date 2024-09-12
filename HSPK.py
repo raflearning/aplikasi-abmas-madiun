@@ -8,14 +8,13 @@ HSPK_TUKANG_KAYU = 93000
 HSPK_KEPALA_TUKANG_BATU = 96000
 HSPK_KEPALA_TUKANG = 96000
 HSPK_KEPALA_TUKANG_KAYU = 96000
-
 # HSPK_bahan
 HSPK_BATU_BELAH = 198350
 HSPK_BATU_PECAH = 325000
 HSPK_PASIR_LOKAL = 233300
 HSPK_PERTAMINA_DEX = 13300
 HSPK_PASIR_URUG = 151650
-HSPK_BONDEK = 140000
+HSPK_BONDEX = 140000
 HSPK_KAYU_JAWA = 3499200
 HSPK_PLYWOOD = 84600
 HSPK_DOLKEN = 20450
@@ -36,7 +35,6 @@ HSPK_PAKU = 600
 HSPK_ADDITIVE = 44250
 HSPK_KAYU_ACUAN = 3171350
 HSPK_SEMEN_40KG = 102500
-
 # HPSK_peralatan
 HSPK_EXCAVATOR = 819402.32
 HSPK_DUMP_TRUCK = 339612.94
@@ -44,7 +42,7 @@ HSPK_WHEEL_LOADER = 538209.99
 HSPK_JACK_HAMMER = 38465.57
 HSPK_COMPRESSOR = 212427.45
 HSPK_MESIN_POMPA_LUMPUR = 339211000
-HSPK_CONCRET_PUMP = 611800
+HSPK_CONCRETE_PUMP = 611800
 HSPK_STAMPER = 26050
 HSPK_BULLDOZER = 876843.85
 HSPK_WATER_TANKER = 317296.73
@@ -53,6 +51,64 @@ HSPK_VIBRATOR_ROLLER = 346350
 HSPK_TRUK_MIXER = 687737.92
 HSPK_CONCRETE_VIBRATOR = 50126.81
 HSPK_SLIP_FORM_PAVER = 636817.51
+HSPK_BATCHING_PLANT = 884000
+
+# Satuan
+# Satuan Tenaga
+SATUAN_PEKERJA = 'OH'
+SATUAN_MANDOR = 'OH'
+SATUAN_TUKANG = 'OH'
+SATUAN_TUKANG_BATU = 'OH'
+SATUAN_TUKANG_KAYU = 'OH'
+SATUAN_KEPALA_TUKANG_BATU = 'OH'
+SATUAN_KEPALA_TUKANG = 'OH'
+SATUAN_KEPALA_TUKANG_KAYU = 'OH'
+# Satuan Bahan
+SATUAN_BATU_BELAH = 'm3'
+SATUAN_BATU_PECAH = 'm3'
+SATUAN_PASIR_LOKAL = 'm3'
+SATUAN_PERTAMINA_DEX = 'liter'
+SATUAN_PASIR_URUG = 'm3'
+SATUAN_BONDEX = 'm2'
+SATUAN_KAYU_JAWA = 'm3'
+SATUAN_PLYWOOD = 'lembar'
+SATUAN_DOLKEN = 'batang'
+SATUAN_KAYU_PERANCAH = 'm3'
+SATUAN_PAKU_BIASA = 'kg'
+SATUAN_BAMBU = 'batang'
+SATUAN_MULTIPLEKS = 'lembar'
+SATUAN_KAYU_BEKISTING = 'm3'
+SATUAN_MINYAK_BEKISTING = 'liter'
+SATUAN_BAJA_TULANGAN_POLOS = 'kg'
+SATUAN_JOINT_SEALENT = 'kg'
+SATUAN_CAT_ANTI_KARAT = 'kg'
+SATUAN_EXPANSION_CAP = 'm2'
+SATUAN_POLYTENE_125_MIKRON = 'kg'
+SATUAN_CURING_COMPOUND = 'liter'
+SATUAN_FORMWORK_PLATE = 'm2'
+SATUAN_PAKU = 'kg'
+SATUAN_ADDITIVE = 'liter'
+SATUAN_KAYU_ACUAN = 'kg'
+SATUAN_SEMEN_40KG = 'zak'
+# Satuan Peralatan
+SATUAN_EXCAVATOR = 'jam'
+SATUAN_DUMP_TRUCK = 'jam'
+SATUAN_COMPRESSOR = 'jam'
+SATUAN_WHEEL_LOADER = 'jam'
+SATUAN_JACK_HAMMER = 'jam'
+SATUAN_MESIN_POMPA_LUMPUR = 'sewa/hari'
+SATUAN_CONCRETE_PUMP = 'sewa/hari'
+SATUAN_STAMPER = 'sewa/hari'
+SATUAN_BULLDOZER = 'jam'
+SATUAN_WATER_TANKER = 'jam'
+SATUAN_ROLLER_VIBRATOR = 'jam'
+SATUAN_VIBRATOR_ROLLER = 'jam'
+SATUAN_TRUK_MIXER = 'jam'
+SATUAN_CONCRETE_VIBRATOR = 'jam'
+SATUAN_SLIP_FORM_PAVER = 'jam'
+SATUAN_BATCHING_PLANT = 'jam'
+
+
 
 # Galian dengan Excavator
 # Galian Tanah dengan Excavator
@@ -130,8 +186,8 @@ class GalianBiasaDenganExcavator:
         self.pekerja = 0.0073 * HSPK_PEKERJA * self.volume_galian
         self.mandor = 0.0037 * HSPK_MANDOR * self.volume_galian
 
-    def peralatan(self, excavator, dump_truck):
-        self.excavator = 0.0256 * HSPK_EXCAVATOR *self. volume_galian
+    def peralatan(self):
+        self.excavator = 0.0256 * HSPK_EXCAVATOR * self.volume_galian
         self.dump_truck = 0.2972 * HSPK_DUMP_TRUCK * self.volume_galian
 
     def ahsp_galian_biasa_dengan_excavator(self):
@@ -207,12 +263,12 @@ KOEFISIEN_GALIAN_TANAH_BIASA_MANUAL = {
     }
 }
 class GalianTanahBiasaManual:
-    def __init__(self, panjang_galian, lebar_galian, kedalaman_galian, tipe_koefisien):
+    def __init__(self, panjang_galian, lebar_galian, kedalaman_galian):
         self.pekerja = None
         self.mandor = None
         self.ahsp_total = None
         self.volume_galian = panjang_galian * lebar_galian * kedalaman_galian
-        self.koefisien_galian = KOEFISIEN_GALIAN_TANAH_BIASA_MANUAL[tipe_koefisien]
+        self.koefisien_galian = KOEFISIEN_GALIAN_TANAH_BIASA_MANUAL[kedalaman_galian]
 
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
@@ -400,32 +456,29 @@ KOEFISIEN_GALIAN_BATU_MANUAL  = {
         'mandor' : 0.0075
     }
 }
-
 class GalianBatuManual:
-    def __init__(self, panjang, lebar, kedalaman, tipe_koefisien):
+    def __init__(self, panjang_galian, lebar_galian, kedalaman_galian):
         self.pekerja = None
         self.mandor = None
         self.ahsp_total = None
-        self.volume_galian = kedalaman
-        self.koefisien_galian = KOEFISIEN_GALIAN_BATU_MANUAL[tipe_koefisien]
+        self.volume_galian = panjang_galian * lebar_galian * kedalaman_galian
+        self.koefisien_galian = KOEFISIEN_GALIAN_BATU_MANUAL[kedalaman_galian]
 
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
 
     def ahsp_galian_batu_manual(self):
-        self.tenaga()
-        self.ahsp_total = self.pekerja + self.mandor
-
+        self.ahsp_total = self.tenaga()
+    
     def galian_batu_manual(self):
         self.tenaga()
         self.ahsp_galian_batu_manual()
         return {
-            'pekerja': self.pekerja,
-            'mandor': self.mandor,
-            'ahsp_total': self.ahsp_total
+            'pekerja' : self.pekerja,
+            'mandor' : self.mandor,
+            'ahsp_total' : self.ahsp_total
         }
-
 
 # Galian Batu Semi Mekanis
 KOEFISIEN_GALIAN_BATU_SEMI_MEKANIS  = {
@@ -532,7 +585,7 @@ class GalianTanahCadasManual:
 KOEFISIEN_GALIAN_TANAH_CADAS_SEMI_MEKANIS  = {
     'galian_1m' : {
         'pekerja' : 0.32,
-        'mandor' : 0.2,
+        'mandor' : 0.02,
         'pertamina_dex' : 0.125,
         'jack_hammer' : 0.125
     },
@@ -1052,7 +1105,7 @@ class BetonReadyMix:
         self.beton = 1.02 * self.hspk_beton['nilai_hspk_beton'] * self.luas_jalan_beton
 
     def peralatan(self):
-        self.concrete_pump = 0.12 * HSPK_CONCRET_PUMP * self.luas_jalan_beton
+        self.concrete_pump = 0.12 * HSPK_CONCRETE_PUMP * self.luas_jalan_beton
     
     def ahsp_beton_readymix(self) :
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
@@ -1077,7 +1130,7 @@ class BetonReadyMix:
 KOEFISIEN_BEKISTING_LANTAI = {
     'multipleks_18mm' : {
         'pekerja' : 0.3,
-        'koefisien_tukang' : 0.3,
+        'tukang' : 0.3,
         'kepala_tukang' : 0.03,
         'mandor' : 0.03,
         'multipleks' : 0.128,
@@ -1087,7 +1140,7 @@ KOEFISIEN_BEKISTING_LANTAI = {
     },
     'multipleks_12mm' : {
         'pekerja' : 0.2,
-        'koefisien_tukang' : 0.1,
+        'tukang' : 0.1,
         'kepala_tukang' : 0.01,
         'mandor' : 0.02,
         'multipleks' : 0.128,
@@ -1113,7 +1166,7 @@ class BekistingLantai:
 
     def tenaga(self):
         self.pekerja = self.hspk_multipleks['pekerja'] * HSPK_PEKERJA * self.luas_bekisting_lantai
-        self.tukang = self.hspk_multipleks['koefisien_tukang'] * HSPK_TUKANG * self.luas_bekisting_lantai
+        self.tukang = self.hspk_multipleks['tukang'] * HSPK_TUKANG * self.luas_bekisting_lantai
         self.kepala_tukang = self.hspk_multipleks['kepala_tukang'] * HSPK_KEPALA_TUKANG * self.luas_bekisting_lantai
         self.mandor = self.hspk_multipleks['mandor'] * HSPK_MANDOR * self.luas_bekisting_lantai
 
@@ -1145,7 +1198,7 @@ class BekistingLantai:
 KOEFISIEN_BEKISTING_KOLOM = {
     'multipleks_18mm' : {
         'pekerja' : 0.33,
-        'koefisien_tukang' : 0.33,
+        'tukang' : 0.33,
         'kepala_tukang' : 0.033,
         'mandor' : 0.033,
         'multipleks' : 0.128,
@@ -1155,7 +1208,7 @@ KOEFISIEN_BEKISTING_KOLOM = {
     },
     'multipleks_15mm' : {
         'pekerja' : 0.34,
-        'koefisien_tukang' :0.17,
+        'tukang' :0.17,
         'kepala_tukang' : 0.017,
         'mandor' : 0.034,
         'multipleks' : 0.14,
@@ -1165,7 +1218,7 @@ KOEFISIEN_BEKISTING_KOLOM = {
     },
     'multipleks_12mm' : {
         'pekerja' : 0.22,
-        'koefisien_tukang' : 0.11,
+        'tukang' : 0.11,
         'kepala_tukang' : 0.011,
         'mandor' : 0.022,
         'multipleks' : 0.128,
@@ -1180,7 +1233,7 @@ class BekistingKolom:
         self.tukang = None
         self.kepala_tukang = None
         self.mandor = None
-        self.bondek = None
+        self.bondex = None
         self.kayu_jawa = None
         self.paku_biasa = None
         self.minyak_bekisting = None
@@ -1192,7 +1245,7 @@ class BekistingKolom:
 
     def tenaga(self):
         self.pekerja = self.hspk_multipleks['pekerja'] * HSPK_PEKERJA * self.luas_bekisting_kolom
-        self.tukang = self.hspk_multipleks['koefisien_tukang'] * HSPK_TUKANG * self.luas_bekisting_kolom
+        self.tukang = self.hspk_multipleks['tukang'] * HSPK_TUKANG * self.luas_bekisting_kolom
         self.kepala_tukang = self.hspk_multipleks['kepala_tukang'] * HSPK_KEPALA_TUKANG * self.luas_bekisting_kolom
         self.mandor = self.hspk_multipleks['mandor'] * HSPK_MANDOR * self.luas_bekisting_kolom
 
@@ -1377,21 +1430,218 @@ class PerkerasanBetonSemen:
         self.pekerja = None
         self.tukang = None
         self.mandor = None
-        self.semen
+        self.semen_40kg = None
+        self.pasir_urug = None
+        self.baja_tulangan_polos = None
+        self.joint_sealent = None
+        self.cat_anti_karat = None
+        self.expansion_cap = None
+        self.polytene_125_mikron = None
+        self.curing_compound = None
+        self.formwork_plate = None
+        self.paku = None
+        self.additive = None
+        self.wheel_loader = None
+        self.batching_plant = None
+        self.truck_mixer = None
+        self.concrete_vibrator = None
+        self.water_tanker = None
+        self.slip_form_paver = None
         self.ahsp_total = None
-        self.volume_bekisting_kolom = panjang_beton * lebar_beton * tebal_beton
+        self.volume_beton = panjang_beton * lebar_beton * tebal_beton
 
     def tenaga(self):
-        self.pekerja = self.hspk_multipleks['pekerja'] * HSPK_PEKERJA * self.luas_bekisting_kolom
-        self.tukang = self.hspk_multipleks['koefisien_tukang'] * HSPK_TUKANG * self.luas_bekisting_kolom
-        self.kepala_tukang = self.hspk_multipleks['kepala_tukang'] * HSPK_KEPALA_TUKANG * self.luas_bekisting_kolom
-        self.mandor = self.hspk_multipleks['mandor'] * HSPK_MANDOR * self.luas_bekisting_kolom
+        self.pekerja = 0.2008 * HSPK_PEKERJA * self.volume_beton
+        self.tukang = 0.1004 * HSPK_TUKANG* self.volume_beton
+        self.mandor = 0.0215 * HSPK_MANDOR * self.volume_beton
 
     def bahan(self):
-        self.multipleks = self.hspk_multipleks['multipleks'] * HSPK_MULTIPLEKS * self.luas_bekisting_kolom
-        self.kayu_bekisting = self.hspk_multipleks['kayu_bekisting'] * HSPK_KAYU_BEKISTING * self.luas_bekisting_kolom
-        self.paku_biasa = self.hspk_multipleks['paku_biasa'] * HSPK_PAKU_BIASA * self.luas_bekisting_kolom
-        self.minyak_bekisting = self.hspk_multipleks['minyak_bekisting'] * HSPK_MINYAK_BEKISTING * self.luas_bekisting_kolom
+        self.semen_40kg = 10.25 * HSPK_SEMEN_40KG * self.volume_beton
+        self.pasir_urug = 0.6237 * HSPK_PASIR_URUG * self.volume_beton
+        self.baja_tulangan_polos = 45 * HSPK_BAJA_TULANGAN_POLOS * self.volume_beton
+        self.joint_sealent = 0.99 * HSPK_JOINT_SEALENT * self.volume_beton
+        self.cat_anti_karat = 0.02 * HSPK_CAT_ANTI_KARAT * self.volume_beton
+        self.expansion_cap = 0.17 * HSPK_EXPANSION_CAP * self.volume_beton
+        self.polytene_125_mikron = 0.3281 * HSPK_POLYTENE_125_MIKRON * self.volume_beton
+        self.curing_compound = 0.6525 * HSPK_CURING_COMPOUND * self.volume_beton
+        self.formwork_plate = 0.57 * HSPK_FORMWORK_PLATE * self.volume_beton
+        self.paku = 0.35 * HSPK_PAKU * self.volume_beton
+        self.additive = 0.8568 * HSPK_ADDITIVE * self.volume_beton
+
+    def peralatan(self):
+        self.wheel_loader = 0.0244 * self.volume_beton
+        self.batching_plant = 0.0502 * HSPK_BATCHING_PLANT * self.volume_beton
+        self.truck_mixer = 0.4942 * HSPK_TRUK_MIXER * self.volume_beton
+        self.concrete_vibrator = 0.0502 * HSPK_CONCRETE_VIBRATOR * self.volume_beton
+        self.water_tanker = 0.0422 * HSPK_WATER_TANKER * self.volume_beton
+        self.slip_form_paver = 0.0074 * HSPK_SLIP_FORM_PAVER * self.volume_beton
+
+    def ahsp_perkerasan_beton_semen(self) :
+        self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan
+
+    def perkerasan_beton_semen(self):
+        self.tenaga()
+        self.bahan()
+        self.peralatan()
+        self.ahsp_perkerasan_beton_semen()
+        return {
+            'pekerja': self.pekerja,
+            'tukang': self.tukang,
+            'mandor' : self.mandor,
+            'semen' : self.semen_40kg,
+            'pasir_urug' : self.pasir_urug,
+            'baja_tulangan_polos' : self.baja_tulangan_polos,
+            'joint_sealent' : self.joint_sealent,
+            'cat_anti_karat' : self.cat_anti_karat,
+            'expansion_cap' : self.expansion_cap,
+            'polytene_125_mikron' : self.polytene_125_mikron,
+            'curing_compound' : self.curing_compound,
+            'formwork_plate' : self.formwork_plate,
+            'paku' : self.paku,
+            'additive' : self.additive,
+            'wheel_loader' : self.wheel_loader,
+            'batching_plant' : self.batching_plant,
+            'truck_mixer' : self.truck_mixer,
+            'concrete_vibrator' : self.concrete_vibrator,
+            'water_tanker' : self.water_tanker,
+            'slip_form_paver' : self.slip_form_paver,
+            'ahsp_total' : self.ahsp_total
+        }
+# Perkerasan Jalan Beton
+class PerkerasanJalanBeton:
+    def __init__(self, panjang_beton, lebar_beton, tebal_beton):
+        self.pekerja = None
+        self.tukang = None
+        self.mandor = None
+        self.semen_40kg = None
+        self.pasir_urug = None
+        self.baja_tulangan_polos = None
+        self.joint_sealent = None
+        self.cat_anti_karat = None
+        self.expansion_cap = None
+        self.polytene_125_mikron = None
+        self.curing_compound = None
+        self.multipleks_12mm = None
+        self.kayu_acuan = None
+        self.paku = None
+        self.additive = None
+        self.wheel_loader = None
+        self.batching_plant = None
+        self.truck_mixer = None
+        self.concrete_vibrator = None
+        self.water_tanker = None
+        self.slip_form_paver = None
+        self.ahsp_total = None
+        self.volume_beton = panjang_beton * lebar_beton * tebal_beton
+
+    def tenaga(self):
+        self.pekerja = 0.2008 * HSPK_PEKERJA * self.volume_beton
+        self.tukang = 0.1004 * HSPK_TUKANG* self.volume_beton
+        self.mandor = 0.0215 * HSPK_MANDOR * self.volume_beton
+
+    def bahan(self):
+        self.semen_40kg = 2.1781 * HSPK_SEMEN_40KG * self.volume_beton
+        self.pasir_urug = 0.6237 * HSPK_PASIR_URUG * self.volume_beton
+        self.baja_tulangan_polos = 15.875 * HSPK_BAJA_TULANGAN_POLOS * self.volume_beton
+        self.joint_sealent = 0.99 * HSPK_JOINT_SEALENT * self.volume_beton
+        self.cat_anti_karat = 0.02 * HSPK_CAT_ANTI_KARAT * self.volume_beton
+        self.expansion_cap = 0.17 * HSPK_EXPANSION_CAP * self.volume_beton
+        self.polytene_125_mikron = 0.4375 * HSPK_POLYTENE_125_MIKRON * self.volume_beton
+        self.curing_compound = 0.87 * HSPK_CURING_COMPOUND * self.volume_beton
+        self.multipleks_12mm = 0.16 * 262450 * self.volume_beton
+        self.kayu_acuan = 0.096 * HSPK_KAYU_ACUAN * self.volume_beton
+        self.paku = 1.024 * HSPK_PAKU * self.volume_beton
+        self.additive = 0.9139 * HSPK_ADDITIVE * self.volume_beton
+
+    def peralatan(self):
+        self.wheel_loader = 0.0244 * self.volume_beton
+        self.batching_plant = 0.0502 * HSPK_BATCHING_PLANT * self.volume_beton
+        self.truck_mixer = 0.6709 * HSPK_TRUK_MIXER * self.volume_beton
+        self.concrete_vibrator = 0.0502 * HSPK_CONCRETE_VIBRATOR * self.volume_beton
+        self.water_tanker = 0.0422 * HSPK_WATER_TANKER * self.volume_beton
+        self.slip_form_paver = 0.0074 * HSPK_SLIP_FORM_PAVER * self.volume_beton
+
+    def ahsp_perkerasan_beton_semen(self) :
+        self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan
+
+    def perkerasan_beton_semen(self):
+        self.tenaga()
+        self.bahan()
+        self.peralatan()
+        self.ahsp_perkerasan_beton_semen()
+        return {
+            'pekerja': self.pekerja,
+            'tukang': self.tukang,
+            'mandor' : self.mandor,
+            'semen' : self.semen_40kg,
+            'pasir_urug' : self.pasir_urug,
+            'baja_tulangan_polos' : self.baja_tulangan_polos,
+            'joint_sealent' : self.joint_sealent,
+            'cat_anti_karat' : self.cat_anti_karat,
+            'expansion_cap' : self.expansion_cap,
+            'polytene_125_mikron' : self.polytene_125_mikron,
+            'curing_compound' : self.curing_compound,
+            'multipleks_12mm' : self.multipleks_12mm,
+            'kayu_acuan' : self.kayu_acuan,
+            'paku' : self.paku,
+            'additive' : self.additive,
+            'wheel_loader' : self.wheel_loader,
+            'batching_plant' : self.batching_plant,
+            'truck_mixer' : self.truck_mixer,
+            'concrete_vibrator' : self.concrete_vibrator,
+            'water_tanker' : self.water_tanker,
+            'slip_form_paver' : self.slip_form_paver,
+            'ahsp_total' : self.ahsp_total
+        }
+    
+# Perancah Bekisting
+# Perancah Bekisting Lantai
+KOEFISIEN_PERANCAH_BEKISTING_LANTAI = {
+    'kayu_meranti' : {
+        'pekerja' : 0.3,
+        'tukang' : 0.15,
+        'kepala_tukang' : 0.015,
+        'mandor' : 0.03,
+        'kayu_perancah' : 0.02,
+        'paku_biasa' : 0.25
+    },
+    'dolken' : {
+        'pekerja' : 0.34,
+        'tukang' : 0.17,
+        'kepala_tukang' : 0.017,
+        'mandor' : 0.034,
+        'dolken' : 1.463,
+        'paku_biasa' : 0.3
+    },
+    'bambu' : {
+        'pekerja' : 0.32,
+        'tukang' : 0.16,
+        'kepala_tukang' : 0.016,
+        'mandor' : 0.032,
+        'bambu' : 1.8,
+        'paku_biasa' : 0.3
+    }
+}
+class PerancahLantaiKayu:
+    def __init__(self, panjang_perancah, lebar_perancah):
+        self.pekerja = None
+        self.tukang = None
+        self.kepala_tukang = None
+        self.mandor = None
+        self.kayu_perancah = None
+        self.paku_biasa = None
+        self.ahsp_total = None
+        self.luas_perancah = panjang_perancah * lebar_perancah
+
+    def tenaga(self):
+        self.pekerja = 0.3 * HSPK_PEKERJA * self.luas_perancah
+        self.tukang = 0.15 * HSPK_TUKANG * self.luas_perancah
+        self.kepala_tukang = 0.015 * HSPK_KEPALA_TUKANG * self.luas_perancah
+        self.mandor = 0.03 * HSPK_MANDOR * self.luas_perancah
+
+    def bahan(self):
+        self.kayu_perancah = 0.02 * HSPK_KAYU_PERANCAH * self.luas_perancah
+        self.paku_biasa = 0.25 * HSPK_PAKU_BIASA * self.luas_perancah
     
     def bekisting_kolom(self) :
         self.ahsp_total = self.tenaga() + self.bahan()
@@ -1405,10 +1655,7 @@ class PerkerasanBetonSemen:
             'tukang': self.tukang,
             'kepala_tukang' : self.kepala_tukang,
             'mandor' : self.mandor,
-            'multipleks' : self.multipleks,
-            'kayu_bekisting' : self.paku_biasa,
+            'kayu_perancah' : self.kayu_perancah,
             'paku_biasa' : self.paku_biasa,
-            'minyak_bekisting' : self.minyak_bekisting,
             'ahsp_total' : self.ahsp_total
         }
-# Perkerasan Jalan Beton
