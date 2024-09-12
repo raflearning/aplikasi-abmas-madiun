@@ -4,7 +4,6 @@ import numpy as np
 from io import BytesIO
 
 def show_estimasi_rab():
-    st.subheader("Estimasi RAB")
 
     # Mengakses data dari jalan_makadam, jalan_paving, dan jalan_beton
     jalan_makadam = st.session_state.get('jalan_makadam', {})
