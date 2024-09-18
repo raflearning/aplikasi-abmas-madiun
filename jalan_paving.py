@@ -2,8 +2,15 @@ import streamlit as st
 import pandas as pd
 from io import BytesIO
 import numpy as np
+import HSPK
 
 def jalan_paving_flow():
+
+    df_galian = None
+    df_urugan = None
+    df_pemadatan = None
+    df_pemasangan_paving = None
+
     st.subheader("Jalan Paving")
 
     # Menambahkan 3 kolom untuk gambar di bagian atas
@@ -46,7 +53,6 @@ def jalan_paving_flow():
             rab_galian = galian_batu_manual.galian_batu_manual()
             
             df_galian = pd.DataFrame(rab_galian['data'])
-            
 
 
         if jenis_galian == "Galian Tanah" and metode == "Manual":
@@ -352,7 +358,6 @@ def jalan_paving_flow():
         rab_pemasangan_paving = pemasangan_paving.hasil_perhitungan()
         
         df_pemasangan_paving = pd.DataFrame(rab_pemasangan_paving['data'])
-        
 
         if st.button("Konfirmasi Pemasangan Paving", key="Konfirmasi_Pemasangan_Paving"):
             st.session_state.jalan_paving.update({
@@ -372,7 +377,7 @@ def jalan_paving_flow():
 
         if st.button("Ekspor ke Excel"):
             #concat jan lupa
-            print(df_galian, df_urugan, df_pemadatan, df_pemasangan_paving)
+            #print(df_galian, df_urugan, df_pemadatan, df_pemasangan_paving)
 
             # Convert dataframe to Excel format
             output = BytesIO()
@@ -395,3 +400,5 @@ def jalan_paving_flow():
 if __name__ == "__main__":
     st.title("Estimasi RAB")
     jalan_paving_flow()
+
+    #setiap rab bentuk dict dibentuk session state
