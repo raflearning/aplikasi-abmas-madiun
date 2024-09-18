@@ -183,7 +183,7 @@ def show_estimasi_rab():
     # Menghitung margin 11%
     margin = total_jumlah_sum * 0.11
 
-    total_jumlah_sum_margin = df_final['Jumlah'].sum()
+    total_jumlah_sum_margin = df_final['Jumlah'].sum() + margin
 
     # Membuat DataFrame dengan total dan margin
     total_jumlah = pd.DataFrame({
@@ -195,12 +195,25 @@ def show_estimasi_rab():
         'Jumlah': [total_jumlah_sum, margin, total_jumlah_sum_margin]
     })
 
+    # Fungsi untuk membold kolom 'Uraian'
+    def highlight_bold(s):
+        return ['font-weight: bold' if v in ['Total', 'Margin', 'Total Setelah Margin'] else '' for v in s]
+
+# Apply styler ke DataFrame
+    styled_df = total_jumlah.style.apply(highlight_bold, subset=['Uraian'])
+
+# Menampilkan DataFrame di Streamlit dengan styling
+    st.write(styled_df.to_html(escape=False), unsafe_allow_html=True)
+
     # Menggabungkan `df_final` dengan `total_jumlah` untuk menampilkan hasil akhir
     df_final_with_margin = pd.concat([df_final, total_jumlah], ignore_index=True)
 
     # Menampilkan DataFrame gabungan di Streamlit
     st.write("### Tabel Estimasi RAB")
     st.dataframe(df_final_with_margin)
+    # Menampilkan DataFrame gabungan di Streamlit tanpa indeks
+ 
+
 
     if st.button("Ekspor Data ke Excel"):
         # Menggunakan BytesIO untuk menyimpan file Excel ke dalam memori
