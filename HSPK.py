@@ -129,10 +129,10 @@ class GalianTanahDenganExcavator:
     def tenaga(self):
         self.pekerja = 0.0414 * HSPK_PEKERJA * self.volume_galian
         self.mandor = 0.0041 * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def peralatan(self):
         self.excavator = 0.0414 * HSPK_EXCAVATOR * self.volume_galian
-    
+        return self.excavator
     def ahsp_galian_tanah_dengan_excavator(self):
         self.ahsp_total = self.tenaga() + self.peralatan()
     
@@ -141,7 +141,7 @@ class GalianTanahDenganExcavator:
         self.peralatan()
         self.ahsp_galian_tanah_dengan_excavator()
         return {
-	        data: {
+	        'data' : {
                 'Uraian': ['Galian', 'Excavator', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan, 0.0414, 0.414, 0.0041],
                 'Volume': [np.nan] + [self.volume_galian] * 3,
@@ -173,11 +173,11 @@ class GalianDrainaseDenganExcavator:
     def tenaga(self):
         self.pekerja = 0.0043 * HSPK_PEKERJA * self.volume_galian
         self.mandor = 0.0011 * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def peralatan(self):
         self.excavator = 0.0076 * HSPK_EXCAVATOR * self.volume_galian
         self.dump_truck = 0.117 * HSPK_DUMP_TRUCK * self.volume_galian
-    
+        return self.excavator + self.dump_truck
     def ahsp_galian_drainase_dengan_excavator(self):
         self.ahsp_total = self.tenaga() + self.peralatan()
 
@@ -186,7 +186,7 @@ class GalianDrainaseDenganExcavator:
         self.peralatan()
         self.ahsp_galian_drainase_dengan_excavator()
         return {
-	        data: {
+	        'data' : {
                 'Uraian': ['Galian', 'Excavator', 'Dump Truck', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan, 0.0076, 0.117, 0.0043, 0.0011],
                 'Volume': [np.nan] + [self.volume_galian] * 4,
@@ -221,11 +221,11 @@ class GalianBiasaDenganExcavator:
     def tenaga(self):
         self.pekerja = 0.0073 * HSPK_PEKERJA * self.volume_galian
         self.mandor = 0.0037 * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def peralatan(self):
         self.excavator = 0.0256 * HSPK_EXCAVATOR * self.volume_galian
         self.dump_truck = 0.2972 * HSPK_DUMP_TRUCK * self.volume_galian
-
+        return self.excavator + self.dump_truck
     def ahsp_galian_biasa_dengan_excavator(self):
         self.ahsp_total = self.tenaga() + self.peralatan()
 
@@ -234,7 +234,7 @@ class GalianBiasaDenganExcavator:
         self.peralatan()
         self.ahsp_galian_biasa_dengan_excavator()
         return {
-            data: {
+            'data' : {
                 'Uraian': ['Galian', 'Excavator', 'Dump Truck', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan, 0.0256, 0.2972, 0.0073, 0.0037],
                 'Volume': [np.nan] + [self.volume_galian] * 4,
@@ -272,14 +272,14 @@ class GalianBatuDenganExcavator:
     def tenaga(self):
         self.pekerja = 0.0843 * HSPK_PEKERJA * self.volume_galian
         self.mandor = 0.0105 * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def peralatan(self):
         self.compressor = 0.0738 * HSPK_COMPRESSOR * self.volume_galian
         self.jack_hammer = 0.0738 * HSPK_JACK_HAMMER * self.volume_galian
         self.wheel_loader = 0.0738 * HSPK_WHEEL_LOADER * self.volume_galian
         self.excavator = 0.0738 * HSPK_EXCAVATOR * self.volume_galian
         self.dump_truck = 0.0738 * HSPK_DUMP_TRUCK * self.volume_galian
-    
+        return self.compressor + self.jack_hammer + self.wheel_loader + self.excavator + self.dump_truck
     def ahsp_galian_batu_dengan_excavator(self):
         self.ahsp_total = self.tenaga() + self.peralatan()
 
@@ -288,7 +288,7 @@ class GalianBatuDenganExcavator:
         self.peralatan()
         self.ahsp_galian_batu_dengan_excavator()
         return {
-            data: {
+            'data' : {
                 'Uraian': ['Galian', 'Compressor', 'Jack Hammer', 'Wheel Loader', 'Excavator', 'Dump Truck', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan, 0.0738, 0.0738, 0.0738, 0.0738, 0.3329, 0.0843, 0.0105],
                 'Volume': [np.nan] + [self.volume_galian] * 7,
@@ -350,7 +350,7 @@ class GalianTanahBiasaManual:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def ahsp_galian_tanah_biasa_manual(self):
         self.ahsp_total = self.tenaga()
     
@@ -358,7 +358,7 @@ class GalianTanahBiasaManual:
         self.tenaga()
         self.ahsp_galian_tanah_biasa_manual()
         return {
-            data: {
+            'data' : {
                 'Uraian': ['Galian', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan,
                               self.koefisien_galian['pekerja'],
@@ -411,13 +411,13 @@ class GalianTanahBiasaSemiMekanis:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA *  self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR *  self.volume_galian
-
+        return self.pekerja + self.mandor
     def bahan(self):
         self.pertamina_dex = self.koefisien_galian['pertamina_dex'] * HSPK_PERTAMINA_DEX *  self.volume_galian
-
+        return self.pertamina_dex
     def peralatan(self):
         self.jack_hammer = self.koefisien_galian['jack_hammer'] * HSPK_JACK_HAMMER *  self.volume_galian
-    
+        return self.jack_hammer
     def ahsp_galian_tanah_biasa_semi_mekanis(self):
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
     
@@ -425,7 +425,7 @@ class GalianTanahBiasaSemiMekanis:
         self.tenaga()
         self.ahsp_galian_tanah_biasa_semi_mekanis()
         return {
-            data: {
+            'data' : {
                 'Uraian': ['Galian', 'Pertamina Dex', 'Jack Hammer','Pekerja', 'Mandor'],
                 'Koefisien': [np.nan,
                               self.koefisien_galian['pertamina_dex'],
@@ -478,7 +478,7 @@ class GalianTanahBerbatuManual:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
-    
+        return self.pekerja + self.mandor
     def ahsp_galian_tanah_berbatu_manual(self):
         self.ahsp_total = self.tenaga()
     
@@ -486,7 +486,7 @@ class GalianTanahBerbatuManual:
         self.tenaga()
         self.ahsp_galian_tanah_berbatu_manual()
         return {
-	            data: {
+	            'data' : {
                 'Uraian': ['Galian', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan,
                               self.koefisien_galian['pekerja'],
@@ -540,13 +540,13 @@ class GalianTanahBerbatuSemiMekanis:
     def tenaga(self,):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def bahan(self):
         self.pertamina_dex = self.koefisien_galian['pertamina_dex'] * HSPK_PERTAMINA_DEX * self.volume_galian
-
+        return self.pertamina_dex
     def peralatan(self):
         self.jack_hammer = self.koefisien_galian['jack_hammer'] * HSPK_JACK_HAMMER * self.volume_galian
-    
+        return self.jack_hammer
     def ahsp_galian_tanah_berbatu_semi_mekanis(self):
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
     
@@ -556,7 +556,7 @@ class GalianTanahBerbatuSemiMekanis:
         self.peralatan()
         self.ahsp_galian_tanah_berbatu_semi_mekanis()
         return {
-	            data: {
+	            'data' : {
                 'Uraian': ['Galian', 'Pertamina dex', 'Jack Hammer', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan,
                               self.koefisien_galian['pertamina_dex'],
@@ -612,7 +612,7 @@ class GalianBatuManual:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def ahsp_galian_batu_manual(self):
         self.ahsp_total = self.tenaga()
     
@@ -620,7 +620,7 @@ class GalianBatuManual:
         self.tenaga()
         self.ahsp_galian_batu_manual()
         return {
-	            data: {
+	            'data' : {
                 'Uraian': ['Galian', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan,
                             self.koefisien_galian['pekerja'],
@@ -673,13 +673,13 @@ class GalianBatuSemiMekanis:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def bahan(self):
         self.pertamina_dex = self.koefisien_galian['pertamina_dex'] * HSPK_PERTAMINA_DEX * self.volume_galian
-
+        return self.pertamina_dex
     def peralatan(self):
         self.jack_hammer = self.koefisien_galian['jack_hammer'] * HSPK_JACK_HAMMER * self.volume_galian
-        
+        return self.jack_hammer
     def ahsp_galian_batu_semi_mekanis(self):
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
     
@@ -689,7 +689,7 @@ class GalianBatuSemiMekanis:
         self.peralatan()
         self.ahsp_galian_batu_semi_mekanis()
         return {
-	            data: {
+	            'data' : {
                 'Uraian': ['Galian', 'Pertamina dex', 'Jack Hammer', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan,
                             self.koefisien_galian['pertamina_dex'],
@@ -746,7 +746,7 @@ class GalianTanahCadasManual:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def ahsp_galian_tanah_cadas_manual(self):
         self.ahsp_total = self.tenaga()
     
@@ -754,7 +754,7 @@ class GalianTanahCadasManual:
         self.tenaga()
         self.ahsp_galian_tanah_cadas_manual()
         return {
-	            data: {
+	            'data' : {
                 'Uraian': ['Galian', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan,
                             self.koefisien_galian['pekerja'],
@@ -807,13 +807,13 @@ class GalianTanahCadasSemiMekanis:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor']* HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def bahan(self):
         self.pertamina_dex = self.koefisien_galian['pertamina_dex'] * HSPK_PERTAMINA_DEX * self.volume_galian
-
+        return self.pertamina_dex
     def peralatan(self):
         self.jack_hammer = self.koefisien_galian['jack_hammer'] * HSPK_JACK_HAMMER * self.volume_galian
-    
+        return self.jack_hammer
     def ahsp_galian_tanah_cadas_semi_mekanis(self):
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
     
@@ -823,7 +823,7 @@ class GalianTanahCadasSemiMekanis:
         self.peralatan()
         self.ahsp_galian_tanah_cadas_semi_mekanis()
         return {
-	            data: {
+	            'data' : {
                 'Uraian': ['Galian', 'Pertamina dex', 'Jack Hammer', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan,
                                 self.koefisien_galian['pertamina_dex'],
@@ -879,7 +879,7 @@ class GalianLumpurManual:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
-    
+        return self.pekerja + self.mandor
     def ahsp_galian_lumpur_manual(self):
         self.ahsp_total = self.tenaga()
     
@@ -887,7 +887,7 @@ class GalianLumpurManual:
         self.tenaga()
         self.ahsp_galian_lumpur_manual()
         return {
-	            data: {
+	            'data' : {
                 'Uraian': ['Galian', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan,
                               self.koefisien_galian['pekerja'],
@@ -945,13 +945,13 @@ class GalianLumpurSemiMekanis:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor']* HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def bahan(self):
         self.pertamina_dex = self.koefisien_galian['pertamina_dex'] * HSPK_PERTAMINA_DEX * self.volume_galian
-
+        return self.pertamina_dex
     def peralatan(self):
         self.mesin_pompa_lumpur = self.koefisien_galian['mesin_pompa_lumpur'] * HSPK_MESIN_POMPA_LUMPUR * self.volume_galian
-    
+        return self.mesin_pompa_lumpur
     def ahsp_galian_lumpur_semi_mekanis(self):
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
     
@@ -961,7 +961,7 @@ class GalianLumpurSemiMekanis:
         self.peralatan()
         self.ahsp_galian_lumpur_semi_mekanis()
         return {
-            data:{
+            'data' :{
                 'Uraian': ['Galian', 
                            'Pertamina dex', 
                            'Mesin Pompa Lumpur', 
@@ -1006,11 +1006,11 @@ class GalianLumpurMekanis:
     def tenaga(self):
         self.pekerja = 0.226 * HSPK_PEKERJA * self.volume_galian
         self.mandor = 0.007 * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def peralatan(self):
         self.dump_truck = 0.07 * HSPK_DUMP_TRUCK * self.volume_galian
         self.excavator = 0.067 * HSPK_EXCAVATOR * self.volume_galian
-    
+        return self.dump_truck + self.excavator
     def ahsp_galian_lumpur_mekanis(self):
         self.ahsp_total = self.tenaga() + self.peralatan()
     
@@ -1020,7 +1020,7 @@ class GalianLumpurMekanis:
         self.peralatan()
         self.ahsp_galian_lumpur_mekanis()
         return {
-            data: {
+            'data' : {
                         'Uraian': ['Galian', 
                                    'Dump Truck', 
                                    'Excavator', 
@@ -1082,7 +1082,7 @@ class GalianPasirManual:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
-    
+        return self.pekerja + self.mandor
     def ahsp_galian_pasir_manual(self):
         self.ahsp_total = self.tenaga()
     
@@ -1090,7 +1090,7 @@ class GalianPasirManual:
         self.tenaga()
         self.ahsp_galian_pasir_manual()
         return {
-            data: {
+            'data' : {
                         'Uraian': ['Pekerja', 
                                    'Mandor'],
                         'Koefisien': [np.nan, 
@@ -1151,13 +1151,13 @@ class GalianPasirSemiMekanis:
     def tenaga(self):
         self.pekerja = self.koefisien_galian['pekerja'] * HSPK_PEKERJA * self.volume_galian
         self.mandor = self.koefisien_galian['mandor'] * HSPK_MANDOR * self.volume_galian
-
+        return self.pekerja + self.mandor
     def bahan(self):
         self.pertamina_dex = self.koefisien_galian['pertamina_dex'] * HSPK_PERTAMINA_DEX * self.volume_galian
-
+        return self.pertamina_dex
     def peralatan(self):
         self.mesin_pompa_lumpur = self.koefisien_galian['mesin_pompa_lumpur'] * HSPK_MESIN_POMPA_LUMPUR * self.volume_galian
-    
+        return self.mesin_pompa_lumpur
     def ahsp_galian_pasir_semi_mekanis(self):
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
     
@@ -1167,7 +1167,7 @@ class GalianPasirSemiMekanis:
         self.peralatan()
         self.ahsp_galian_pasir_semi_mekanis()
         return {
-            data: {
+            'data' : {
                         'Uraian': ['Galian', 
                                    'Pertamina dex', 
                                    'Mesin Pompa Lumpur', 
@@ -1231,10 +1231,10 @@ class Urugan:
     def tenaga(self):
         self.pekerja = self.jenis_urugan['pekerja'] * HSPK_PEKERJA * self.luas_urugan
         self.mandor = self.jenis_urugan['mandor'] * HSPK_MANDOR * self.luas_urugan
-
+        return self.pekerja + self.mandor
     def bahan(self):
         self.urug = self.jenis_urugan['koefisien_urugan'] * self.jenis_urugan['hspk_urugan'] * self.luas_urugan
-    
+        return self.urug
     def ahsp_urugan(self):
         self.ahsp_total = self.tenaga() + self.bahan()
     
@@ -1243,7 +1243,7 @@ class Urugan:
         self.bahan()
         self.ahsp_urugan()
         return {
-            data: {
+            'data' : {
                         'Uraian': ['Pekerja', 
                                    'Mandor'],
                         'Koefisien': [np.nan, 
@@ -1277,12 +1277,12 @@ class JalanMakadam:
     def tenaga(self):
         self.pekerja = 1 * HSPK_PEKERJA * self.luas_jalan_sementara
         self.mandor = 0.005 * HSPK_MANDOR * self.luas_jalan_sementara
-
+        return self.pekerja + self.mandor
     def bahan(self):
         self.batu_belah = 0.15 * HSPK_BATU_BELAH * self.luas_jalan_sementara
         self.batu_pecah = 0.09 * HSPK_BATU_PECAH * self.luas_jalan_sementara
         self.pasir_lokal = 0.01 * HSPK_PASIR_LOKAL * self.luas_jalan_sementara
-    
+        return self.batu_belah + self.batu_pecah + self.pasir_lokal
     def ahsp_jalan_makadam(self):
         self.ahsp_total = self.tenaga() + self.bahan()
 
@@ -1291,7 +1291,7 @@ class JalanMakadam:
         self.bahan()
         self.ahsp_jalan_makadam()
         return {
-            data: {
+            'data' : {
                         'Uraian': ['Galian', 
                                    'Batu Belah', 
                                    'Batu Pecah', 
@@ -1389,14 +1389,14 @@ class PemasanganPaving:
         self.tukang_batu = self.koefisien_pemasangan_paving['tukang_batu'] * HSPK_TUKANG_BATU * self.luas_pemasangan_paving
         self.kepala_tukang_batu = self.koefisien_pemasangan_paving['kepala_tukang_batu'] * HSPK_KEPALA_TUKANG_BATU * self.luas_pemasangan_paving
         self.mandor = self.koefisien_pemasangan_paving['mandor'] * HSPK_MANDOR * self.luas_pemasangan_paving
-
+        return self.pekerja + self.tukang_batu + self.kepala_tukang_batu + self.mandor 
     def bahan(self):
         self.paving = self.koefisien_pemasangan_paving['koefisien_paving'] * self.koefisien_pemasangan_paving['hspk_paving'] * self.luas_pemasangan_paving
         self.pasir_urug = self.koefisien_pemasangan_paving['pasir_urug'] * HSPK_PASIR_URUG * self.luas_pemasangan_paving
-    
+        return self.paving + self.pasir_urug
     def peralatan(self):
         self.alat_pasang = self.koefisien_pemasangan_paving['koefisien_paving'] * self.koefisien_pemasangan_paving['hspk_paving'] * self.luas_pemasangan_paving
-    
+        return self.alat_pasang
     def ahsp_pemasangan_paving(self):
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
     
@@ -1406,7 +1406,7 @@ class PemasanganPaving:
         self.peralatan()
         self.ahsp_pemasangan_paving()
          return {
-            data :{
+            'data' :{
                 'Uraian': ['Pemasangan Paving', 'paving', 'pasir urug', 'pekerja', 'tukang batu', 'kepala tukang batu', 'mandor'],
                 'koefisien': [np.nan, 
                             self.koefisien_pemasangan_paving['koefisien_paving'], 
@@ -1481,13 +1481,13 @@ class BetonReadyMix:
         self.tukang = 0.25 * HSPK_TUKANG_BATU * self.luas_jalan_beton
         self.kepala_tukang = 0.025 * HSPK_KEPALA_TUKANG * self.luas_jalan_beton
         self.mandor = 0.1 * HSPK_MANDOR * self.luas_jalan_beton
-    
+        return self.pekerja + self.tukang + self.kepala_tukang + self.mandor
     def bahan(self):
         self.beton = 1.02 * self.hspk_beton['nilai_hspk_beton'] * self.luas_jalan_beton
-
+        return self.beton
     def peralatan(self):
         self.concrete_pump = 0.12 * HSPK_CONCRETE_PUMP * self.luas_jalan_beton
-    
+        return self.concrete_pump
     def ahsp_beton_readymix(self) :
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
 
@@ -1497,7 +1497,7 @@ class BetonReadyMix:
         self.peralatan()
         self.ahsp_beton_readymix()
         return {
-            data :{
+            'data' :{
                 'Uraian': ['Beton Ready Mix', 'beton', 'concrete_pump', 'pekerja', 'tukang', 'kepala tukang', 'mandor'],
                 'koefisien': [np.nan, 
                                 1.02, 
@@ -1579,13 +1579,13 @@ class BekistingLantai:
         self.tukang = self.hspk_bekisting['tukang'] * HSPK_TUKANG * self.luas_bekisting_lantai
         self.kepala_tukang = self.hspk_bekisting['kepala_tukang'] * HSPK_KEPALA_TUKANG * self.luas_bekisting_lantai
         self.mandor = self.hspk_bekisting['mandor'] * HSPK_MANDOR * self.luas_bekisting_lantai
-
+        return self.pekerja + self.tukang + self.kepala_tukang + self.mandor
     def bahan(self):
         self.multipleks = self.hspk_bekisting['multipleks'] * HSPK_MULTIPLEKS * self.luas_bekisting_lantai
         self.kayu_bekisting = self.hspk_bekisting['kayu_bekisting'] * HSPK_KAYU_BEKISTING * self.luas_bekisting_lantai
         self.paku_biasa = self.hspk_bekisting['paku_biasa'] * HSPK_PAKU_BIASA * self.luas_bekisting_lantai
         self.minyak_bekisting = self.hspk_bekisting['minyak_bekisting'] * HSPK_MINYAK_BEKISTING * self.luas_bekisting_lantai
-
+        return self.multipleks + self.kayu_bekisting + self.paku_biasa + self.minyak_bekisting
     def ahsp_bekisting_lantai(self) :
         self.total = self.tenaga() + self.bahan()   
 
@@ -1594,7 +1594,7 @@ class BekistingLantai:
         self.bahan()
         self.ahsp_bekisting_lantai()
         return {
-                data: {
+                'data' : {
                         'Uraian': ['Bekisting', 'Multipleks', 'Kayu Bekisting', 'Paku Biasa', 'Minyak Bekisting', 'Pekerja', 'Tukang', 'Kepala Tukang', 'Mandor'],
                         'Koefisien': [np.nan,
                                     self.hspk_bekisting['multipleks'],
@@ -1690,13 +1690,13 @@ class BekistingKolom:
         self.tukang = self.hspk_multipleks['tukang'] * HSPK_TUKANG * self.luas_bekisting_kolom
         self.kepala_tukang = self.hspk_multipleks['kepala_tukang'] * HSPK_KEPALA_TUKANG * self.luas_bekisting_kolom
         self.mandor = self.hspk_multipleks['mandor'] * HSPK_MANDOR * self.luas_bekisting_kolom
-
+        return self.pekerja + self.tukang + self.kepala_tukang + self.mandor
     def bahan(self):
         self.multipleks = self.hspk_multipleks['multipleks'] * HSPK_MULTIPLEKS * self.luas_bekisting_kolom
         self.kayu_bekisting = self.hspk_multipleks['kayu_bekisting'] * HSPK_KAYU_BEKISTING * self.luas_bekisting_kolom
         self.paku_biasa = self.hspk_multipleks['paku_biasa'] * HSPK_PAKU_BIASA * self.luas_bekisting_kolom
         self.minyak_bekisting = self.hspk_multipleks['minyak_bekisting'] * HSPK_MINYAK_BEKISTING * self.luas_bekisting_kolom
-    
+        return self.multipleks + self.kayu_bekisting + self.paku_biasa + self.minyak_bekisting
     def bekisting_kolom(self) :
         self.ahsp_total = self.tenaga() + self.bahan()
 
@@ -1705,7 +1705,7 @@ class BekistingKolom:
         self.bahan()
         self.bekisting_kolom()
         return {
-                data: {
+                'data' : {
                         'Uraian': ['Bekisting', 'Multipleks', 'Kayu Bekisting', 'Paku Biasa', 'Minyak Bekisting', 'Pekerja', 'Tukang', 'Kepala Tukang', 'Mandor'],
                         'Koefisien': [np.nan,
                                     self.hspk_multipleks['multipleks'],
@@ -1762,7 +1762,7 @@ class UruganTanahKembali:
         self.pekerja = 0.226 * HSPK_PEKERJA * self.volume_pemadatan
         self.mandor = 0.007 * HSPK_MANDOR * self.volume_pemadatan
         self.tukang = 0.0062 * HSPK_TUKANG * self.volume_pemadatan
-
+        return self.pekerja + self.mandor + self.tukang
     def ahsp_urugan_tanah_kembali(self):
         self.ahsp_total = self.tenaga()
     
@@ -1770,7 +1770,7 @@ class UruganTanahKembali:
         self.tenaga()
         self.ahsp_urugan_tanah_kembali()
         return {
-                data:{
+                'data' :{
                         'Uraian':['Galian', 'Pekerja','Mandor','Tukang'],
                         'Koefisien':[np.nan, 0.226, 0.007,0.0062],
                         'Volume':[np.nan] + [self.volume_pemadatan]*3,
@@ -1802,10 +1802,10 @@ class PemadatanTanahDenganStamper:
         self.pekerja = 0.062 * HSPK_PEKERJA * self.volume_pemadatan
         self.mandor = 0.186 * HSPK_MANDOR * self.volume_pemadatan
         self.tukang = 0.0062 * HSPK_TUKANG * self.volume_pemadatan
-    
+        return self.pekerja + self.mandor + self.tukang
     def peralatan(self):
         self.stamper = 0.05 * HSPK_STAMPER * self.volume_pemadatan
-
+        return self.stamper
     def ahsp_pemadatan_tanah_dengan_stamper(self):
         self.ahsp_total = self.tenaga() + self.peralatan()
     
@@ -1814,7 +1814,7 @@ class PemadatanTanahDenganStamper:
         self.peralatan()
         self.ahsp_pemadatan_tanah_dengan_stamper()
         return {
-                data: {
+                'data' : {
                         'Uraian' : ['Pemadatan', 'Stamper', 'Pekerja', 'Mandor', 'Tukang'],
                         'Koefisien' : [np.nan, 0.05, 0.062, 0.186, 0.0062],
                         'Volume' : [np.nan] + [self.volume_pemadatan]*4,
@@ -1852,12 +1852,12 @@ class PemadatanTanahDenganBulldozer:
         self.pekerja = 0.062 * HSPK_PEKERJA * self.volume_pemadatan
         self.mandor = 0.186 * HSPK_MANDOR * self.volume_pemadatan
         self.tukang = 0.0062 * HSPK_TUKANG * self.volume_pemadatan
-    
+        return self.pekerja + self.mandor + self.tukang
     def peralatan(self):
         self.bulldozer = 0.02 * HSPK_BULLDOZER * self.volume_pemadatan
         self.water_tanker = 0.0078 * HSPK_WATER_TANKER * self.volume_pemadatan
         self.roller_vibrator = 0.0178 * HSPK_ROLLER_VIBRATOR * self.volume_pemadatan
-
+        return self.bulldozer + self.water_tanker + self.roller_vibrator
     def ahsp_pemadatan_tanah_dengan_bulldozer(self):
         self.ahsp_total = self.tenaga() + self.peralatan()
     
@@ -1866,7 +1866,7 @@ class PemadatanTanahDenganBulldozer:
         self.peralatan()
         self.ahsp_pemadatan_tanah_dengan_bulldozer()
         return {
-                data: {
+                'data' : {
                         'Uraian' : ['Pemadatan', 'Buldozzer','Water Tanker', 'Roller Fibrator', 'Pekerja','Mandor', 'Tukang'],
                         'Koefisien': [np.nan, 0.02, 0.0078, 0.0178, 0.062, 0.186, 0.0062],
                         'Volume' : [np.nan] + [self.volume_pemadatan]*6,
@@ -1906,10 +1906,10 @@ class PemadatanBetonDenganVibrator:
     def tenaga(self):
         self.pekerja = 0.25 * HSPK_PEKERJA * self.volume_pemadatan
         self.mandor = 0.025 * HSPK_MANDOR * self.volume_pemadatan
-    
+        return self.pekerja + self.mandor
     def peralatan(self):
         self.vibrator_roller = 0.1 * HSPK_VIBRATOR_ROLLER * self.volume_pemadatan
-
+        return self.vibrator_roller
     def ahsp_pemadatan_beton_dengan_vibrator(self):
         self.ahsp_total = self.tenaga() + self.peralatan()
     
@@ -1934,7 +1934,7 @@ class PemadatanBetonManual:
     def tenaga(self):
         self.pekerja = 0.25 * HSPK_PEKERJA * self.volume_pemadatan
         self.mandor = 0.025 * HSPK_MANDOR * self.volume_pemadatan
-
+        return self.pekerja + self.mandor
     def ahsp_pemadatan_beton_manual(self):
         self.ahsp_total = self.tenaga()
     
@@ -1942,7 +1942,7 @@ class PemadatanBetonManual:
         self.tenaga()
         self.ahsp_pemadatan_beton_manual()
         return {
-                data: {
+                'data' : {
                     'Uraian': ['Pemadatan', 'Pekerja', 'Mandor'],
                     'Koefisien': [np.nan, 0.25, 0.025],
                     'Volume': [np.nan] + [self.volume_pemadatan]*2,
@@ -1990,7 +1990,7 @@ class PerkerasanBetonSemen:
         self.pekerja = 0.2008 * HSPK_PEKERJA * self.volume_beton
         self.tukang = 0.1004 * HSPK_TUKANG* self.volume_beton
         self.mandor = 0.0215 * HSPK_MANDOR * self.volume_beton
-
+        return self.pekerja + self.tukang + self.mandor
     def bahan(self):
         self.semen_40kg = 10.25 * HSPK_SEMEN_40KG * self.volume_beton
         self.pasir_urug = 0.6237 * HSPK_PASIR_URUG * self.volume_beton
@@ -2003,7 +2003,7 @@ class PerkerasanBetonSemen:
         self.formwork_plate = 0.57 * HSPK_FORMWORK_PLATE * self.volume_beton
         self.paku = 0.35 * HSPK_PAKU * self.volume_beton
         self.additive = 0.8568 * HSPK_ADDITIVE * self.volume_beton
-
+        return self.semen_40kg + self.pasir_urug + self.baja_tulangan_polos + self.joint_sealent + self.cat_anti_karat + self.expansion_cap + self.polytene_125_mikron + self. curing_compound + self.formwork_plate + self.paku + self.additive
     def peralatan(self):
         self.wheel_loader = 0.0244 * self.volume_beton
         self.batching_plant = 0.0502 * HSPK_BATCHING_PLANT * self.volume_beton
@@ -2011,7 +2011,7 @@ class PerkerasanBetonSemen:
         self.concrete_vibrator = 0.0502 * HSPK_CONCRETE_VIBRATOR * self.volume_beton
         self.water_tanker = 0.0422 * HSPK_WATER_TANKER * self.volume_beton
         self.slip_form_paver = 0.0074 * HSPK_SLIP_FORM_PAVER * self.volume_beton
-
+        return self.wheel_loader + self.batching_plant + self.truck_mixer + self.concrete_vibrator + self.water_tanker + self.slip_form_paver
     def ahsp_perkerasan_beton_semen(self) :
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan
 
@@ -2021,7 +2021,7 @@ class PerkerasanBetonSemen:
         self.peralatan()
         self.ahsp_perkerasan_beton_semen()
         return {
-                data: {
+                'data' : {
                     'Uraian': ['Perkerasan','Semen 40 kg', 'Pasir Urug', 'Baja Tulangan Polos', 'Joint Sealent', 'Cat Anti Karat', 'Expansion Cap', 'Polytene 125 Mikron','Curing Compound','Formwork Plate', 'Paku','Additive','Wheel Loader','Batching Plant', 'Truck Mixer','Concrete Vibrator','Water Tanker','Slip Form Paver', 'Pekerja', 'Tukang', 'Mandor'],
                     'Koefisien': [np.nan, 10.25, 0.6237, 45, 0.99, 0.02, 0.17, 0.3281, 0.6525, 0.57, 0.35, 0.8568, 0.0244, 0.0502, 0.4942, 0.0502, 0.0422, 0.0074, 0.2008, 0.1004, 0.0215],
                     'Volume': [np.nan] + [self.volume_beton]*20,
@@ -2122,7 +2122,7 @@ class PerkerasanJalanBeton:
         self.pekerja = 0.2008 * HSPK_PEKERJA * self.volume_beton
         self.tukang = 0.1004 * HSPK_TUKANG* self.volume_beton
         self.mandor = 0.0215 * HSPK_MANDOR * self.volume_beton
-
+        return self.pekerja + self.tukang + self.mandor
     def bahan(self):
         self.semen_40kg = 2.1781 * HSPK_SEMEN_40KG * self.volume_beton
         self.pasir_urug = 0.6237 * HSPK_PASIR_URUG * self.volume_beton
@@ -2136,7 +2136,7 @@ class PerkerasanJalanBeton:
         self.kayu_acuan = 0.096 * HSPK_KAYU_ACUAN * self.volume_beton
         self.paku = 1.024 * HSPK_PAKU * self.volume_beton
         self.additive = 0.9139 * HSPK_ADDITIVE * self.volume_beton
-
+        return self.semen_40kg + self.pasir_urug + self.baja_tulangan_polos + self.joint_sealent + self.cat_anti_karat + self.expansion_cap + self.polytene_125_mikron + self.curing_compound + self.multipleks_12mm + self.kayu_acuan + self.paku + self.paku + self.additive
     def peralatan(self):
         self.wheel_loader = 0.0244 * self.volume_beton
         self.batching_plant = 0.0502 * HSPK_BATCHING_PLANT * self.volume_beton
@@ -2144,7 +2144,7 @@ class PerkerasanJalanBeton:
         self.concrete_vibrator = 0.0502 * HSPK_CONCRETE_VIBRATOR * self.volume_beton
         self.water_tanker = 0.0422 * HSPK_WATER_TANKER * self.volume_beton
         self.slip_form_paver = 0.0074 * HSPK_SLIP_FORM_PAVER * self.volume_beton
-
+        return self.wheel_loader + self.batching_plant + self.truck_mixer + self.concrete_vibrator + self.water_tanker + self.slip_form_paver
     def ahsp_perkerasan_beton_semen(self) :
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan
 
@@ -2154,7 +2154,7 @@ class PerkerasanJalanBeton:
         self.peralatan()
         self.ahsp_perkerasan_beton_semen()
         return {
-                data:{
+                'data' :{
                     'Uraian': ['Perkerasan', 'Semen 40 kg', 'Pasir Urug', 'Baja Tulangan Polos', 'Joint Sealent', 'Cat Anti Karat', 'Expansion Cap', 'Polytene 125 Mikron','Curing Compound','Multipleks 12 mm', 'Kayu Acuan','Paku','Additive','Wheel Loader','Batching Plant', 'Truck Mixer','Concrete Vibrator','Water Tanker','Slip Form Paver', 'Pekerja', 'Tukang', 'Mandor'],
                     'Koefisien': [np.nan, 2.1781, 0.6237, 15.875, 0.99, 0.02, 0.17, 0.4375, 0.87, 0.16, 0.096, 1.024, 0.9139, 0.0244, 0.0502, 0.6709, 0.0502, 0.0422, 0.0074, 0.200, 0.1004, 0.0215],
                     'Volume': [np.nan] + [self.volume_beton]*21,
@@ -2246,11 +2246,11 @@ class PerancahLantaiKayu:
         self.tukang = 0.15 * HSPK_TUKANG * self.luas_perancah
         self.kepala_tukang = 0.015 * HSPK_KEPALA_TUKANG * self.luas_perancah
         self.mandor = 0.03 * HSPK_MANDOR * self.luas_perancah
-
+        return self.pekerja + self.tukang + self.kepala_tukang + self.mandor
     def bahan(self):
         self.kayu_perancah = 0.02 * HSPK_KAYU_PERANCAH * self.luas_perancah
         self.paku_biasa = 0.25 * HSPK_PAKU_BIASA * self.luas_perancah
-    
+        return self.kayu_perancah + self.paku_biasa
     def perancah_lantai(self) :
         self.ahsp_total = self.tenaga() + self.bahan()
 
@@ -2259,7 +2259,7 @@ class PerancahLantaiKayu:
         self.bahan()
         self.perancah_lantai()
         return {
-                data: {
+                'data' : {
                         'Uraian': ['Bekisting', 'Kayu Perancah', 'Paku Biasa', 'Pekerja', 'Tukang', 'Kepala Tukang', 'Mandor'],
                         'Koefisien': [np.nan, 0.3, 0.15, 0.015, 0.03, 0.02, 0.25],
                         'Volume': [np.nan] + [self.luas_perancah] * 6,
@@ -2304,11 +2304,11 @@ class PerancahLantaiDolken:
         self.tukang = 0.17 * HSPK_TUKANG * self.luas_perancah
         self.kepala_tukang = 0.017 * HSPK_KEPALA_TUKANG * self.luas_perancah
         self.mandor = 0.034 * HSPK_MANDOR * self.luas_perancah
-
+        return self.pekerja + self.tukang + self.kepala_tukang + self.mandor
     def bahan(self):
         self.dolken = 1.463 * HSPK_DOLKEN * self.luas_perancah
         self.paku_biasa = 0.3 * HSPK_PAKU_BIASA * self.luas_perancah
-    
+        return self.dolken + self.paku_biasa
     def perancah_lantai(self) :
         self.ahsp_total = self.tenaga() + self.bahan()
 
@@ -2317,7 +2317,7 @@ class PerancahLantaiDolken:
         self.bahan()
         self.perancah_lantai()
         return {
-                data: {
+                'data' : {
                         'Uraian': ['Bekisting', 'Dolken', 'Paku Biasa', 'Pekerja', 'Tukang', 'Kepala Tukang', 'Mandor'],
                         'Koefisien': [np.nan, 0.34, 0.17, 0.017, 0.034, 1.436, 0.3],
                         'Volume': [np.nan] + [self.luas_perancah] * 6,
@@ -2362,11 +2362,11 @@ class PerancahLantaiBambu:
         self.tukang = 0.16 * HSPK_TUKANG * self.luas_perancah
         self.kepala_tukang = 0.016 * HSPK_KEPALA_TUKANG * self.luas_perancah
         self.mandor = 0.032 * HSPK_MANDOR * self.luas_perancah
-
+        return self.pekerja + self.tukang + self.kepala_tukang + self.mandor
     def bahan(self):
         self.bambu = 1.8 * HSPK_BAMBU * self.luas_perancah
         self.paku_biasa = 0.3 * HSPK_PAKU_BIASA * self.luas_perancah
-    
+        return self.bambu + self.paku_biasa
     def perancah_lantai(self) :
         self.ahsp_total = self.tenaga() + self.bahan()
 
@@ -2375,7 +2375,7 @@ class PerancahLantaiBambu:
         self.bahan()
         self.perancah_lantai()
         return {
-                data: {
+                'data' : {
                         'Uraian': ['Bekisting', 'Bambu', 'Paku Biasa', 'Pekerja', 'Tukang', 'Kepala Tukang', 'Mandor'],
                         'Koefisien': [np.nan, 0.32, 0.16, 0.016, 0.032, 1.8, 0.3],
                         'Volume': [np.nan] + [self.luas_perancah] * 6,
@@ -2422,11 +2422,11 @@ class PerancahKolomKayu:
         self.tukang = 0.17 * HSPK_TUKANG * self.luas_perancah
         self.kepala_tukang = 0.017 * HSPK_KEPALA_TUKANG * self.luas_perancah
         self.mandor = 0.034 * HSPK_MANDOR * self.luas_perancah
-
+        return self.pekerja + self.tukang + self.kepala_tukang + self.mandor
     def bahan(self):
         self.kayu_perancah = 0.011 * HSPK_KAYU_PERANCAH * self.luas_perancah
         self.paku_biasa = 0.25 * HSPK_PAKU_BIASA * self.luas_perancah
-    
+        return self.kayu_perancah + self.paku_biasa
     def perancah_kolom(self) :
         self.ahsp_total = self.tenaga() + self.bahan()
 
@@ -2435,7 +2435,7 @@ class PerancahKolomKayu:
         self.bahan()
         self.perancah_kolom()
         return {
-                data: {
+                'data' : {
                         'Uraian': ['Bekisting', 'Kayu Perancah', 'Paku Biasa', 'Pekerja', 'Tukang', 'Kepala Tukang', 'Mandor'],
                         'Koefisien': [np.nan, 0.34, 0.17, 0.017, 0.034, 0.011, 0.25],
                         'Volume': [np.nan] + [self.luas_perancah] * 6,
@@ -2480,11 +2480,11 @@ class PerancahKolomDolken:
         self.tukang = 0.19 * HSPK_TUKANG * self.luas_perancah
         self.kepala_tukang = 0.019 * HSPK_KEPALA_TUKANG * self.luas_perancah
         self.mandor = 0.038 * HSPK_MANDOR * self.luas_perancah
-
+        return self.pekerja + self.tukang + self.kepala_tukang + self.mandor
     def bahan(self):
         self.dolken =  0.748 * HSPK_DOLKEN * self.luas_perancah
         self.paku_biasa = 0.24 * HSPK_PAKU_BIASA * self.luas_perancah
-    
+        return self.dolken + self.paku_biasa
     def perancah_kolom(self) :
         self.ahsp_total = self.tenaga() + self.bahan()
 
@@ -2493,7 +2493,7 @@ class PerancahKolomDolken:
         self.bahan()
         self.perancah_kolom()
         return {
-                data: {
+                'data' : {
                         'Uraian': ['Bekisting', 'Dolken', 'Paku Biasa', 'Pekerja', 'Tukang', 'Kepala Tukang', 'Mandor'],
                         'Koefisien': [np.nan, 0.38, 0.19, 0.019, 0.038, 0.748, 0.24],
                         'Volume': [np.nan] + [self.luas_perancah] * 6,
@@ -2539,12 +2539,12 @@ class PerancahKolomBambu:
         self.tukang = 0.18 * HSPK_TUKANG * self.luas_perancah
         self.kepala_tukang = 0.018 * HSPK_KEPALA_TUKANG * self.luas_perancah
         self.mandor = 0.036 * HSPK_MANDOR * self.luas_perancah
-
+        return self.pekerja + self.tukang + self.kepala_tukang + self.mandor
     def bahan(self):
         self.bambu = 0.92 * HSPK_BAMBU * self.luas_perancah
         self.paku_biasa = 0.24 * HSPK_PAKU_BIASA * self.luas_perancah
         self.tali_ijuk = 3.5 * HSPK_TALI_IJUK * self.tali_ijuk
-    
+        return self.bambu + self.paku_biasa + self.tali_ijuk
     def perancah_kolom(self) :
         self.ahsp_total = self.tenaga() + self.bahan()
 
@@ -2553,7 +2553,7 @@ class PerancahKolomBambu:
         self.bahan()
         self.perancah_kolom()
         return {
-                data: {
+                'data' : {
                         'Uraian': ['Bekisting', 'Bambu', 'Paku Biasa', 'Tali Ijuk', 'Pekerja', 'Tukang', 'Kepala Tukang', 'Mandor'],
                         'Koefisien': [np.nan, 0.36, 0.18, 0.018, 0.036, 0.92, 0.24, 3.5],
                         'Volume': [np.nan] + [self.luas_perancah] * 7,
