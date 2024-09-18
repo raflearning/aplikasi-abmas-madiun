@@ -1,3 +1,5 @@
+import numpy as np
+
 # Library HSPK
 # HSPK Tenaga
 HSPK_PEKERJA = 81500
@@ -158,7 +160,7 @@ class GalianTanahDenganExcavator:
                            self.pekerja,
                            self.mandor]
                 },
-	        subtotal: self.ahsp_total
+	        'subtotal': self.ahsp_total
 	    }
 # Galian Drainase dengan Excavator
 class GalianDrainaseDenganExcavator:
@@ -206,7 +208,7 @@ class GalianDrainaseDenganExcavator:
                            self.pekerja,
                            self.mandor]
                 },
-	        subtotal: self.ahsp_total
+	        'subtotal': self.ahsp_total
 	    }
 # Galian Biasa dengan Excavator
 class GalianBiasaDenganExcavator:
@@ -254,7 +256,7 @@ class GalianBiasaDenganExcavator:
                            self.pekerja, 
                            self.mandor]
                 },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
         }
 # Galian Batu dengan Excavator
 class GalianBatuDenganExcavator:
@@ -317,7 +319,7 @@ class GalianBatuDenganExcavator:
                            self.pekerja,
                            self.mandor]
                 },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
         }
 
 # Galian Tanah Biasa Manual
@@ -374,7 +376,7 @@ class GalianTanahBiasaManual:
                            self.pekerja,
                            self.mandor]
                 },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
         }
 
 # Galian Tanah Biasa Semi Mekanis
@@ -449,7 +451,7 @@ class GalianTanahBiasaSemiMekanis:
                             self.pekerja, 
                             self.mandor ]
                 },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
         }
 
 # Galian Tanah Berbatu Manual
@@ -502,7 +504,7 @@ class GalianTanahBerbatuManual:
                            self.pekerja,
                            self.mandor]
                 },
-	            subtotal: self.ahsp_total
+	            'subtotal': self.ahsp_total
 	    }
 
 # Galian Tanah Berbatu Semi Mekanis
@@ -580,7 +582,7 @@ class GalianTanahBerbatuSemiMekanis:
                             self.pekerja,
                             self.mandor]
             },
-	            subtotal: self.ahsp_total
+	            'subtotal': self.ahsp_total
 	    }
 # Galian Batu Manual
 KOEFISIEN_GALIAN_BATU_MANUAL  = {
@@ -636,7 +638,7 @@ class GalianBatuManual:
                             self.pekerja,
                             self.mandor]
             },
-	            subtotal: self.ahsp_total
+	            'subtotal': self.ahsp_total
 	    }
 
 # Galian Batu Semi Mekanis
@@ -713,7 +715,7 @@ class GalianBatuSemiMekanis:
                             self.pekerja,
                             self.mandor]
             },
-	            subtotal: self.ahsp_total
+	            'subtotal': self.ahsp_total
 	    }
 
 # Galian Tanah Cadas Manual
@@ -770,7 +772,7 @@ class GalianTanahCadasManual:
                             self.pekerja,
                             self.mandor]
             },
-	            subtotal: self.ahsp_total
+	            'subtotal': self.ahsp_total
 	    }
 
 
@@ -817,7 +819,7 @@ class GalianTanahCadasSemiMekanis:
     def ahsp_galian_tanah_cadas_semi_mekanis(self):
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
     
-    def galian_tanah_cadas_manual(self):
+    def galian_tanah_cadas_semi_mekanis(self):
         self.tenaga()
         self.bahan()
         self.peralatan()
@@ -847,7 +849,7 @@ class GalianTanahCadasSemiMekanis:
                                 self.pekerja,
                                 self.mandor]
             },
-	            subtotal: self.ahsp_total
+	            'subtotal': self.ahsp_total
 	    }
 
 # Galian Lumpur Manual
@@ -903,7 +905,7 @@ class GalianLumpurManual:
                             self.pekerja,
                             self.mandor]
             },
-	            subtotal: self.ahsp_total
+	            'subtotal': self.ahsp_total
 	    }
 
 # Galian Lumpur Semi Mekanis
@@ -989,7 +991,7 @@ class GalianLumpurSemiMekanis:
                            self.pekerja, 
                            self.mandor]
                 },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
         }
 
 
@@ -1016,7 +1018,6 @@ class GalianLumpurMekanis:
     
     def galian_lumpur_mekanis(self):
         self.tenaga()
-        self.bahan()
         self.peralatan()
         self.ahsp_galian_lumpur_mekanis()
         return {
@@ -1048,7 +1049,7 @@ class GalianLumpurMekanis:
                                    self.pekerja, 
                                    self.mandor]
                     },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
             }
 
 
@@ -1091,7 +1092,8 @@ class GalianPasirManual:
         self.ahsp_galian_pasir_manual()
         return {
             'data' : {
-                        'Uraian': ['Pekerja', 
+                        'Uraian': ['Galian',
+                                'Pekerja', 
                                    'Mandor'],
                         'Koefisien': [np.nan, 
                                       self.koefisien_galian['pekerja'], 
@@ -1107,7 +1109,7 @@ class GalianPasirManual:
                                    self.pekerja, 
                                    self.mandor]
                     },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
             }
 
 
@@ -1117,25 +1119,25 @@ KOEFISIEN_GALIAN_PASIR_SEMI_MEKANIS  = {
         'pekerja' : 0.1,
         'mandor' : 0.01,
         'pertamina_dex' : 1.1,
-        'jack_hammer' : 0.0002
+        'mesin_pompa_lumpur' : 0.0002
     },
     'galian_2m' : {
         'pekerja' : 0.265,
         'mandor' : 0.0265,
         'pertamina_dex' : 1.5,
-        'jack_hammer' : 0.002
+        'mesin_pompa_lumpur' : 0.0002
     },
     'galian_3m' : {
         'pekerja' : 0.28,
         'mandor' : 0.028,
         'pertamina_dex' : 1.8,
-        'jack_hammer' : 0.0003
+        'mesin_pompa_lumpur' : 0.0003
     },
     'penambahan_1m' : {
         'pekerja' : 0.015,
         'mandor' : 0.002,
         'pertamina_dex' : 0.24,
-        'jack_hammer' : 0.00003
+        'mesin_pompa_lumpur': 0.00003
     }
 }
 class GalianPasirSemiMekanis:
@@ -1195,7 +1197,7 @@ class GalianPasirSemiMekanis:
                                    self.pekerja, 
                                    self.mandor]
                     },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
             }
 
 # Urugan
@@ -1221,19 +1223,19 @@ KOEFISIEN_URUGAN = {
 }
 # Urugan Tanah, Pasir, Sirtu
 class Urugan:
-    def __init__(self, panjang_urugan, lebar_urugan, tipe_koefisien):
+    def __init__(self, panjang_urugan, lebar_urugan, kedalaman_urugan, tipe_koefisien):
         self.pekerja = None
         self.mandor = None
         self.ahsp_total = None
-        self.luas_urugan = panjang_urugan * lebar_urugan
+        self.volume_urugan = panjang_urugan * lebar_urugan * kedalaman_urugan
         self.jenis_urugan = KOEFISIEN_URUGAN[tipe_koefisien]
 
     def tenaga(self):
-        self.pekerja = self.jenis_urugan['pekerja'] * HSPK_PEKERJA * self.luas_urugan
-        self.mandor = self.jenis_urugan['mandor'] * HSPK_MANDOR * self.luas_urugan
+        self.pekerja = self.jenis_urugan['pekerja'] * HSPK_PEKERJA * self.volume_urugan
+        self.mandor = self.jenis_urugan['mandor'] * HSPK_MANDOR * self.volume_urugan
         return self.pekerja + self.mandor
     def bahan(self):
-        self.urug = self.jenis_urugan['koefisien_urugan'] * self.jenis_urugan['hspk_urugan'] * self.luas_urugan
+        self.urug = self.jenis_urugan['koefisien_urugan'] * self.jenis_urugan['hspk_urugan'] * self.volume_urugan
         return self.urug
     def ahsp_urugan(self):
         self.ahsp_total = self.tenaga() + self.bahan()
@@ -1244,12 +1246,13 @@ class Urugan:
         self.ahsp_urugan()
         return {
             'data' : {
-                        'Uraian': ['Pekerja', 
+                        'Uraian': ['Urugan',
+                                    'Pekerja', 
                                    'Mandor'],
                         'Koefisien': [np.nan, 
                                       self.jenis_urugan['pekerja'], 
                                       self.jenis_urugan['mandor']],
-                        'Volume': [np.nan],
+                        'Volume': [np.nan] + [self.volume_urugan] * 2,
                         'Satuan': [np.nan, 
                                    SATUAN_PEKERJA, 
                                    SATUAN_MANDOR],
@@ -1260,7 +1263,7 @@ class Urugan:
                                    self.pekerja, 
                                    self.mandor]
                     },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
         }
 
 # Urugan Jalan Sementara (Makadam)
@@ -1324,7 +1327,7 @@ class JalanMakadam:
                                    self.pekerja,
                                    self.mandor]
                     },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
         }
 
 # Pemasangan Paving
@@ -1372,7 +1375,7 @@ KOEFISIEN_PEMASANGAN_PAVING = {
 }
 
 class PemasanganPaving:
-    def __init__(self, panjang_jalan_paving, lebar_jalan_paving, tipe_koefisien):
+    def _init_(self, panjang_jalan_paving, lebar_jalan_paving, tipe_koefisien):
         self.pekerja = None
         self.tukang_batu = None
         self.kepala_tukang_batu = None
@@ -1383,7 +1386,6 @@ class PemasanganPaving:
         self.ahsp_total = None
         self.luas_pemasangan_paving = panjang_jalan_paving * lebar_jalan_paving
         self.koefisien_pemasangan_paving = KOEFISIEN_PEMASANGAN_PAVING[tipe_koefisien]
-
     def tenaga(self):
         self.pekerja = self.koefisien_pemasangan_paving['pekerja'] * HSPK_PEKERJA * self.luas_pemasangan_paving
         self.tukang_batu = self.koefisien_pemasangan_paving['tukang_batu'] * HSPK_TUKANG_BATU * self.luas_pemasangan_paving
@@ -1395,7 +1397,7 @@ class PemasanganPaving:
         self.pasir_urug = self.koefisien_pemasangan_paving['pasir_urug'] * HSPK_PASIR_URUG * self.luas_pemasangan_paving
         return self.paving + self.pasir_urug
     def peralatan(self):
-        self.alat_pasang = self.koefisien_pemasangan_paving['koefisien_paving'] * self.koefisien_pemasangan_paving['hspk_paving'] * self.luas_pemasangan_paving
+        self.alat_pasang =  10 * self.koefisien_pemasangan_paving['hspk_peralatan'] * self.luas_pemasangan_paving
         return self.alat_pasang
     def ahsp_pemasangan_paving(self):
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
@@ -1407,33 +1409,36 @@ class PemasanganPaving:
         self.ahsp_pemasangan_paving()
         return {
             'data' :{
-                'Uraian': ['Pemasangan Paving', 'paving', 'pasir urug', 'pekerja', 'tukang batu', 'kepala tukang batu', 'mandor'],
+                'Uraian': ['Pemasangan Paving', 'paving', 'pasir urug', 'peralatan', 'pekerja', 'tukang batu', 'kepala tukang batu', 'mandor'],
                 'koefisien': [np.nan, 
                             self.koefisien_pemasangan_paving['koefisien_paving'], 
-                            self.koefisien_pemasangan_paving['pasir_urug'], 
+                            self.koefisien_pemasangan_paving['pasir_urug'],
+                            10,
                             self.koefisien_pemasangan_paving['pekerja'], 
                             self.koefisien_pemasangan_paving['tukang_batu'], 
                             self.koefisien_pemasangan_paving['kepala_tukang_batu'], 
                             self.koefisien_pemasangan_paving['mandor']],
-
-                'Volume': [np.nan, self.luas_pemasangan_paving * 6],
+                'Volume': [np.nan], [self.luas_pemasangan_paving] * 7,
                 'Satuan': [np.nan,
                             SATUAN_PAVING,
-                            SATUAN_PASIR_URUG, 
+                            SATUAN_PASIR_URUG,
+                            '%', 
                             SATUAN_PEKERJA, 
                             SATUAN_TUKANG_BATU, 
                             SATUAN_KEPALA_TUKANG_BATU, 
                             SATUAN_MANDOR],
                 'Harga Satuan': [np.nan,
                                 self.koefisien_pemasangan_paving['hspk_paving'], 
-                                HSPK_PASIR_URUG, 
+                                HSPK_PASIR_URUG,
+                                self.koefisien_pemasangan_paving['hspk_peralatan'], 
                                 HSPK_PEKERJA, 
                                 HSPK_TUKANG_BATU, 
                                 HSPK_KEPALA_TUKANG_BATU, 
                                 HSPK_MANDOR],
                 'Jumlah': [np.nan,
                             self.paving, 
-                            self.pasir_urug, 
+                            self.pasir_urug,
+                            self.alat_pasang, 
                             self.pekerja, 
                             self.tukang_batu, 
                             self.kepala_tukang_batu, 
@@ -1532,7 +1537,7 @@ class BetonReadyMix:
                             self.kepala_tukang, 
                             self.mandor]
             },
-            subtotal: self.ahsp_total
+            'subtotal': self.ahsp_total
         }
 
 # Bekisting
@@ -1634,7 +1639,7 @@ class BekistingLantai:
                                     self.kepala_tukang,
                                     self.mandor]
                     },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
                 }
 # Bekisting Kolom
 KOEFISIEN_BEKISTING_KOLOM = {
@@ -1745,7 +1750,7 @@ class BekistingKolom:
                                     self.kepala_tukang,
                                     self.mandor]
                     },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
                 }
 
 # Pemadatan
@@ -1787,7 +1792,7 @@ class UruganTanahKembali:
                                 self.mandor,
                                 self.tukang],
                     },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
         }
 # Pemadatan Tanah dengan Stamper
 class PemadatanTanahDenganStamper:
@@ -1834,7 +1839,7 @@ class PemadatanTanahDenganStamper:
                                     self.mandor,
                                     self.tukang]
                     },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
         }
 # Pemadatan Tanah dengan Bulldozer
 class PemadatanTanahDenganBulldozer:
@@ -1892,7 +1897,7 @@ class PemadatanTanahDenganBulldozer:
                                     self.mandor,
                                     self.tukang]
                 },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
         }
 # Pemadatan Beton dengan Vibrator
 class PemadatanBetonDenganVibrator:
@@ -1956,7 +1961,7 @@ class PemadatanBetonManual:
                             self.pekerja,
                             self.mandor]
                 },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
         }
     
 # Perkerasan
@@ -2089,7 +2094,7 @@ class PerkerasanBetonSemen:
                                 self.tukang,
                                 self.mandor]
                 },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
         }
 # Perkerasan Jalan Beton
 class PerkerasanJalanBeton:
@@ -2225,7 +2230,7 @@ class PerkerasanJalanBeton:
                             self.tukang,
                             self.mandor ],
                 },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
         }
     
 # Perancah Bekisting Lantai
@@ -2285,7 +2290,7 @@ class PerancahLantaiKayu:
                                 self.kepala_tukang,
                                 self.mandor]
                     },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
                 }
 # Perancah Lantai Dolken
 class PerancahLantaiDolken:
@@ -2343,7 +2348,7 @@ class PerancahLantaiDolken:
                                 self.kepala_tukang,
                                 self.mandor]
                     },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
                 }
 # Perancah Lantai Bambu
 class PerancahLantaiBambu:
@@ -2401,7 +2406,7 @@ class PerancahLantaiBambu:
                                 self.kepala_tukang,
                                 self.mandor]
                     },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
                 }
 
 # Perancah Bekisting Kolom
@@ -2461,7 +2466,7 @@ class PerancahKolomKayu:
                                 self.kepala_tukang,
                                 self.mandor]
                     },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
                 }
 # Perancah Kolom Dolken
 class PerancahKolomDolken:
@@ -2519,7 +2524,7 @@ class PerancahKolomDolken:
                                 self.kepala_tukang,
                                 self.mandor]
                     },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
                 }
 # Perancah Kolom Bambu
 class PerancahKolomBambu:
@@ -2581,5 +2586,5 @@ class PerancahKolomBambu:
                                 self.kepala_tukang,
                                 self.mandor]
                     },
-                subtotal: self.ahsp_total
+                'subtotal': self.ahsp_total
                 }
