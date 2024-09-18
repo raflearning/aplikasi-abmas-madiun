@@ -4,6 +4,7 @@ import numpy as np
 from io import BytesIO
 
 def show_estimasi_rab():
+    st.subheader("Estimasi RAB")
 
     # Mengakses data dari jalan_makadam, jalan_paving, dan jalan_beton
     jalan_makadam = st.session_state.get('jalan_makadam', {})
@@ -18,14 +19,18 @@ def show_estimasi_rab():
     if jalan_makadam:
         st.write("### Data Jalan Makadam")
         jenis_galian = jalan_makadam.get('jenis_galian', '')
-        metode = jalan_makadam.get('metode', 'Manual')
+        metode = jalan_makadam.get('metode', '')
+        pemadatan_urugan = jalan_makadam.get('pemadatan_urugan', '')
         
         if 'panjang_galian' in jalan_makadam and 'lebar_galian' in jalan_makadam and 'kedalaman_galian' in jalan_makadam:
             # Menghitung volume galian makadam
             volume_galian = jalan_makadam['panjang_galian'] * jalan_makadam['lebar_galian'] * jalan_makadam['kedalaman_galian']
 
-        if 'panjang_urugan' in jalan_makadam and 'lebar_urugan' in jalan_makadam:
+        if 'panjang_urugan' in jalan_makadam and 'lebar_urugan' in jalan_makadam :
             luas_urugan = jalan_makadam['panjang_urugan'] * jalan_makadam['lebar_urugan']
+
+        if 'panjang_urugan' in jalan_makadam and 'lebar_urugan' in jalan_makadam and 'kedalaman_urugan' in jalan_makadam :
+            volume_pemadatan = jalan_makadam['panjang_urugan'] * jalan_makadam['lebar_urugan'] * jalan_makadam['kedalaman_urugan']
 
     if jalan_paving:
         st.write("### Data Jalan Paving")
@@ -75,6 +80,15 @@ def show_estimasi_rab():
                 'Harga Satuan': [np.nan, 13300, 44700, 81500, 98000],
                 'Jumlah': [np.nan] * 5
             }
+        elif metode == 'Mekanis':
+            data_galian = {
+                'Uraian': ['Galian', 'Compressor', 'Jack Hammer', 'Wheel Loader', 'Excavator', 'Dump Truck', 'Pekerja (Buruh Tidak Terampil)', 'Mandor'],
+                'Koefisien': [np.nan, 0.0738, 0.0738, 0.0738, 0.0738, 0.3329, 0.0843, 0.0105],
+                'Volume': [np.nan] + [volume_galian] * 7,  # Menggunakan np.nan untuk baris pertama
+                'Satuan': [np.nan, 'jam', 'jam','jam','jam','jam', 'OH', 'OH'],
+                'Harga Satuan': [np.nan, 212427.45, 38465.57, 538209.99, 819402.32, 339612.94, 81500, 98000],
+                'Jumlah': [np.nan] * 8
+            }
     elif jenis_galian == 'Galian Tanah':
         if metode == 'Manual':
             data_galian = {
@@ -94,6 +108,15 @@ def show_estimasi_rab():
                 'Harga Satuan': [np.nan, 13300, 44700, 81500, 98000],
                 'Jumlah': [np.nan] * 5
             }
+        if metode == 'Mekanis':
+            data_galian = {
+                'Uraian': ['Galian', 'Excavator','Pekerja', 'Mandor'],
+                'Koefisien': [np.nan, 0.0414, 0.83, 0.083],
+                'Volume': [np.nan] + [volume_galian] * 3,
+                'Satuan': [np.nan, 'jam', 'OH', 'OH'],
+                'Harga Satuan': [np.nan, 819402.32, 81500, 98000],
+                'Jumlah': [np.nan] * 4
+            }
     elif jenis_galian == 'Galian Lumpur':
         if metode == 'Manual':
             data_galian = {
@@ -111,6 +134,15 @@ def show_estimasi_rab():
                 'Volume': [np.nan] + [volume_galian] * 5,
                 'Satuan': [np.nan, 'liter', 'sewa-harian', 'OH', 'OH'],
                 'Harga Satuan': [np.nan, 13300, 339221000, 81500, 98000],
+                'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan]
+            }
+        elif metode == 'Mekanis':
+            data_galian = {
+                'Uraian': ['Galian', 'Dump Truck', 'Excavator', 'Pekerja', 'Mandor'],
+                'Koefisien': [np.nan, 0.07, 0.067, 0.226, 0.007],
+                'Volume': [np.nan] + [volume_galian] * 4,
+                'Satuan': [np.nan, 'jam', 'jam', 'OH', 'OH'],
+                'Harga Satuan': [np.nan, 339612.94, 819402.32, 81500, 98000],
                 'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan]
             }
     elif jenis_galian == 'Galian Cadas':
@@ -137,7 +169,7 @@ def show_estimasi_rab():
             data_galian = {
                 'Uraian': ['Galian', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan, 0.66, 0.066],
-                'Volume': data_jalan_paving['Volume'],
+                'Volume': [np.nan] + [volume_galian] * 2,
                 'Satuan': [np.nan, 'OH', 'OH'],
                 'Harga Satuan': [np.nan, 81500, 98000],
                 'Jumlah': [np.nan, np.nan, np.nan]
@@ -145,7 +177,7 @@ def show_estimasi_rab():
         elif metode == 'Semi Mekanis':
             data_galian = {
                  'Uraian': ['Galian', 'Pertamina dex', 'Mesin Pompa Lumpur', 'Pekerja', 'Mandor'],
-                'Koefisien': [np.nan, 1.5, 0.0002, 0.265, 0.0265],
+                'Koefisien': [np.nan, 1.1, 0.0002, 0.1, 0.01],
                 'Volume': [np.nan] + [volume_galian] * 4,
                 'Satuan': [np.nan, 'liter', 'sewa-harian', 'OH', 'OH'],
                 'Harga Satuan': [np.nan, 13300, 339221000, 81500, 98000],
@@ -167,12 +199,35 @@ def show_estimasi_rab():
             'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
     }
 
-    # Membuat DataFrame untuk tabel galian dan urugan
+    data_pemadatan = None
+
+# Definisi data untuk tabel pemadatan
+    if pemadatan_urugan == 'Stamper':
+        data_pemadatan = {
+            'Uraian': ['Pemadatan Tanah', 'Stamper', 'Pekerja', 'Tukang', 'Mandor'],
+            'Koefisien': [np.nan, 0.05, 0.062, 0.186, 0.0062],
+            'Volume': [np.nan] + [volume_pemadatan] * 4,
+            'Satuan': [np.nan, 'sewa-hari', 'OH', 'OH', 'OH'],
+            'Harga Satuan': [np.nan, 26050, 81500, 93000, 98000],
+            'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan]
+    }
+    elif pemadatan_urugan == 'Bulldozer':
+        data_pemadatan = {
+            'Uraian': ['Pemadatan Tanah', 'Bulldozer', 'Water Tanker','Roller Vibrator','Pekerja', 'Mandor'],
+            'Koefisien': [np.nan, 0.02, 0.0078, 0.0178, 0.1422, 0.0142],
+            'Volume': [np.nan] + [volume_pemadatan] * 5,
+            'Satuan': [np.nan, 'jam', 'jam', 'jam', 'jam', 'jam'],
+            'Harga Satuan': [np.nan, 876843.85, 317296.73, 464580, 81500, 98000],
+            'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
+    } 
+    # data_pemadatanMembuat DataFrame untuk tabel galian dan urugan
     df_galian = pd.DataFrame(data_galian)
     df_urugan = pd.DataFrame(data_urugan)
+    df_pemadatan = pd.DataFrame(data_pemadatan)
+
 
     # Menggabungkan tabel galian dengan urugan
-    df_final = pd.concat([df_galian, df_urugan], ignore_index=True)
+    df_final = pd.concat([df_galian, df_urugan, df_pemadatan], ignore_index=True)
 
     # Menghitung kolom 'Jumlah' sebagai hasil perkalian 'Volume', 'Koefisien', dan 'Harga Satuan'
     df_final['Jumlah'] = df_final['Volume'] * df_final['Koefisien'] * df_final['Harga Satuan']
@@ -195,25 +250,12 @@ def show_estimasi_rab():
         'Jumlah': [total_jumlah_sum, margin, total_jumlah_sum_margin]
     })
 
-    # Fungsi untuk membold kolom 'Uraian'
-    def highlight_bold(s):
-        return ['font-weight: bold' if v in ['Total', 'Margin', 'Total Setelah Margin'] else '' for v in s]
-
-# Apply styler ke DataFrame
-    styled_df = total_jumlah.style.apply(highlight_bold, subset=['Uraian'])
-
-# Menampilkan DataFrame di Streamlit dengan styling
-    st.write(styled_df.to_html(escape=False), unsafe_allow_html=True)
-
     # Menggabungkan `df_final` dengan `total_jumlah` untuk menampilkan hasil akhir
     df_final_with_margin = pd.concat([df_final, total_jumlah], ignore_index=True)
 
     # Menampilkan DataFrame gabungan di Streamlit
     st.write("### Tabel Estimasi RAB")
     st.dataframe(df_final_with_margin)
-    # Menampilkan DataFrame gabungan di Streamlit tanpa indeks
- 
-
 
     if st.button("Ekspor Data ke Excel"):
         # Menggunakan BytesIO untuk menyimpan file Excel ke dalam memori

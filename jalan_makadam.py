@@ -26,16 +26,19 @@ def jalan_makadam_flow():
     if st.session_state.get('show_galian_input', False):
         st.write("### Pekerjaan Galian")
         jenis_galian = st.selectbox("Jenis Galian", ["Galian Batu", "Galian Tanah", "Galian Lumpur", "Galian Pasir", "Galian Cadas"])
-        
-        # Menyesuaikan metode pekerjaan berdasarkan jenis galian yang dipilih
-        if jenis_galian == "Galian Lumpur":
-            metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"])
-        else:
-            metode = st.radio("Metode Pekerjaan", ["Manual", "Semi Mekanis"])
+        #metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"])
+
+# Tentukan metode berdasarkan jenis galian yang dipilih
+
+        if jenis_galian in ["Galian Batu", "Galian Tanah", "Galian Lumpur"]:
+            metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"], key="metode_full_options")
+        elif jenis_galian in ["Galian Pasir", "Galian Cadas"]:
+            metode = st.radio("Metode Pekerjaan", ["Manual", "Semi Mekanis"], key="metode_limited_options")
 
         panjang = st.number_input("Panjang Galian (m)", format="%.2f", min_value=0.0)
         lebar = st.number_input("Lebar Galian (m)", format="%.2f", min_value=0.0)
         kedalaman = st.number_input("Kedalaman Makadam (m)", format="%.2f", min_value=0.0)
+
 
         if st.button("Konfirmasi Galian", key="konfirmasi_galian"):
             if panjang == 0 or lebar == 0 or kedalaman == 0:
@@ -57,6 +60,7 @@ def jalan_makadam_flow():
         st.write("### Pekerjaan Pemasangan Jalan Makadam")
         panjang_urugan = st.number_input("Panjang Urugan (m)", format="%.2f", min_value=0.0)
         lebar_urugan = st.number_input("Lebar Urugan (m)", format="%.2f", min_value=0.0)
+        kedalaman_urugan = st.number_input("Kedalaman Urugan (m)", format="%.2f", min_value=0.0)
         pemadatan_urugan = st.selectbox("Jenis Pemadatan", ["Stamper", "Bulldozer"])
 
         if st.button("Konfirmasi Urugan", key="konfirmasi_urugan"):
@@ -66,6 +70,7 @@ def jalan_makadam_flow():
                 st.session_state.jalan_makadam.update({
                     'panjang_urugan': panjang_urugan,
                     'lebar_urugan': lebar_urugan,
+                    'kedalaman_urugan': kedalaman_urugan,
                     'pemadatan_urugan': pemadatan_urugan,
                 })
                 st.success("Input Urugan disimpan! Tekan tombol Submit untuk menyimpan semua data.")
