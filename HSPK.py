@@ -1375,7 +1375,7 @@ KOEFISIEN_PEMASANGAN_PAVING = {
 }
 
 class PemasanganPaving:
-    def _init_(self, panjang_jalan_paving, lebar_jalan_paving, tipe_koefisien):
+    def __init__(self, panjang_jalan_paving, lebar_jalan_paving, tipe_koefisien):
         self.pekerja = None
         self.tukang_batu = None
         self.kepala_tukang_batu = None
@@ -1386,6 +1386,7 @@ class PemasanganPaving:
         self.ahsp_total = None
         self.luas_pemasangan_paving = panjang_jalan_paving * lebar_jalan_paving
         self.koefisien_pemasangan_paving = KOEFISIEN_PEMASANGAN_PAVING[tipe_koefisien]
+
     def tenaga(self):
         self.pekerja = self.koefisien_pemasangan_paving['pekerja'] * HSPK_PEKERJA * self.luas_pemasangan_paving
         self.tukang_batu = self.koefisien_pemasangan_paving['tukang_batu'] * HSPK_TUKANG_BATU * self.luas_pemasangan_paving
@@ -1397,7 +1398,7 @@ class PemasanganPaving:
         self.pasir_urug = self.koefisien_pemasangan_paving['pasir_urug'] * HSPK_PASIR_URUG * self.luas_pemasangan_paving
         return self.paving + self.pasir_urug
     def peralatan(self):
-        self.alat_pasang =  10 * self.koefisien_pemasangan_paving['hspk_peralatan'] * self.luas_pemasangan_paving
+        self.alat_pasang = self.koefisien_pemasangan_paving['koefisien_paving'] * self.koefisien_pemasangan_paving['hspk_paving'] * self.luas_pemasangan_paving
         return self.alat_pasang
     def ahsp_pemasangan_paving(self):
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
@@ -1409,43 +1410,40 @@ class PemasanganPaving:
         self.ahsp_pemasangan_paving()
         return {
             'data' :{
-                'Uraian': ['Pemasangan Paving', 'paving', 'pasir urug', 'peralatan', 'pekerja', 'tukang batu', 'kepala tukang batu', 'mandor'],
+                'Uraian': ['Pemasangan Paving', 'paving', 'pasir urug', 'pekerja', 'tukang batu', 'kepala tukang batu', 'mandor'],
                 'koefisien': [np.nan, 
                             self.koefisien_pemasangan_paving['koefisien_paving'], 
-                            self.koefisien_pemasangan_paving['pasir_urug'],
-                            10,
+                            self.koefisien_pemasangan_paving['pasir_urug'], 
                             self.koefisien_pemasangan_paving['pekerja'], 
                             self.koefisien_pemasangan_paving['tukang_batu'], 
                             self.koefisien_pemasangan_paving['kepala_tukang_batu'], 
                             self.koefisien_pemasangan_paving['mandor']],
-                'Volume': [np.nan], [self.luas_pemasangan_paving] * 7,
+
+                'Volume': [np.nan] + [self.luas_pemasangan_paving] * 6,
                 'Satuan': [np.nan,
                             SATUAN_PAVING,
-                            SATUAN_PASIR_URUG,
-                            '%', 
+                            SATUAN_PASIR_URUG, 
                             SATUAN_PEKERJA, 
                             SATUAN_TUKANG_BATU, 
                             SATUAN_KEPALA_TUKANG_BATU, 
                             SATUAN_MANDOR],
                 'Harga Satuan': [np.nan,
-                                self.koefisien_pemasangan_paving['hspk_paving'], 
-                                HSPK_PASIR_URUG,
-                                self.koefisien_pemasangan_paving['hspk_peralatan'], 
+                                self.koefisien_pemasangan_paving['hspk_paving'],
+                                HSPK_PASIR_URUG, 
                                 HSPK_PEKERJA, 
                                 HSPK_TUKANG_BATU, 
                                 HSPK_KEPALA_TUKANG_BATU, 
                                 HSPK_MANDOR],
                 'Jumlah': [np.nan,
                             self.paving, 
-                            self.pasir_urug,
-                            self.alat_pasang, 
+                            self.pasir_urug, 
                             self.pekerja, 
                             self.tukang_batu, 
                             self.kepala_tukang_batu, 
                             self.mandor]
                 },
-            subtotal : self.ahsp_total
-        }
+            'subtotal': self.ahsp_total
+            }
 
 # Pengecoran
 # Koefisien (nilai) HSPK Beton sesuai Mutu
