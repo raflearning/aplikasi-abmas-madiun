@@ -3,6 +3,8 @@ import pandas as pd
 from io import BytesIO
 import numpy as np
 import HSPK
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
 
 def jalan_paving_flow():
 
@@ -342,27 +344,41 @@ def jalan_paving_flow():
             df_pemadatan = pd.DataFrame(st.session_state.rab_pemadatan['data'])
             df_pemasangan_paving = pd.DataFrame(st.session_state.rab_pemasangan_paving['data'])
 
-            #concat jan lupa
+            # Menggabungkan semua data frame
+            df_combined = pd.concat([df_galian, df_urugan, df_pemadatan, df_pemasangan_paving], ignore_index=True)
 
-            print(df_galian, df_pemadatan, df_pemasangan_paving, df_urugan)
+            # Membuat workbook dan worksheet baru
+            wb = Workbook()
+            ws = wb.active
+            ws.title = "RAB Jalan Paving"
 
-            # Convert dataframe to Excel format
-            # output = BytesIO()
-            # with pd.ExcelWriter(output, engine='openpyxl') as writer:
-            #     df.to_excel(writer, index=False, sheet_name='RAB Jalan Paving')
-            # output.seek(0)
+            # Menambahkan data frame ke worksheet
+            for r in dataframe_to_rows(df_combined, index=False, header=True):
+                ws.append(r)
+
+            # Menggabungkan sel sesuai kebutuhan
+            ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=7)
+            ws.merge_cells(start_row=5, start_column=1, end_row=5, end_column=7)
+            ws.merge_cells(start_row=8, start_column=1, end_row=8, end_column=7)
+            ws.merge_cells(start_row=15, start_column=1, end_row=15, end_column=7)
+
+            # Convert workbook to BytesIO
+            output = BytesIO()
+            wb.save(output)
+            output.seek(0)
 
             # Download the Excel file
-            # st.download_button(
-            #     label="Download Excel",
-            #     data='output',
-            #     file_name="estimasi_rab_jalan_paving.xlsx",
-            #     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            # )
+            st.download_button(
+                label="Download Excel",
+                data=output,
+                file_name="estimasi_rab_jalan_paving.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
 
         if st.button("Konfirmasi dan Selesai"):
             st.success("RAB telah berhasil direkapitulasi dan selesai.")
             st.balloons()
+
 
 if __name__ == "__main__":
     st.title("Estimasi RAB")
