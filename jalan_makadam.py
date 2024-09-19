@@ -9,10 +9,10 @@ def jalan_makadam_flow():
     col1, col2 = st.columns(2)
 
     with col1:
-        st.image("jalan makadam 1.jpg", caption="1", use_column_width=True)
+        st.image("assets/jalan makadam 1.jpg", caption="1", use_column_width=True)
 
     with col2:
-        st.image("jalan makadam 2.jpg", caption="2", use_column_width=True)
+        st.image("assets/jalan makadam 2.jpg", caption="2", use_column_width=True)
 
     if st.button("Mulai Input"):
         st.session_state.jalan_makadam = {}

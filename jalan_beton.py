@@ -9,13 +9,13 @@ def jalan_beton_flow():
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.image("jalan beton 1.jpg", caption="1", use_column_width=True)
+        st.image("assets/alan beton 1.jpg", caption="1", use_column_width=True)
 
     with col2:
-        st.image("jalan beton 2.jpg", caption="2", use_column_width=True)
+        st.image("assets/jalan beton 2.jpg", caption="2", use_column_width=True)
 
     with col3:
-        st.image("jalan beton 3.jpg", caption="3", use_column_width=True)
+        st.image("assets/jalan beton 3.jpg", caption="3", use_column_width=True)
 
     if st.button("Mulai Input"):
         st.session_state.jalan_beton = {}
