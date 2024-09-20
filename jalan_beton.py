@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from io import BytesIO
+import HSPK
 
 def jalan_beton_flow():
     st.subheader("Jalan Beton")
@@ -21,8 +22,12 @@ def jalan_beton_flow():
         st.session_state.jalan_beton = {}
         st.session_state.show_galian_input = True
         st.session_state.show_urugan_input = False
-        st.session_state.show_paving_input = False
+        st.session_state.show_beton_input = False
         st.session_state.show_estimasi_input = False
+
+        # st.session_state.rab_galian = None
+        # st.session_state.rab_urugan = None
+        # st.session_state.rab_pemadatan = None
 
     # Bagian Galian
     if st.session_state.get('show_galian_input', False):
@@ -30,90 +35,424 @@ def jalan_beton_flow():
         jenis_galian = st.selectbox("Jenis Galian", ["Galian Batu", "Galian Tanah", "Galian Lumpur", "Galian Pasir", "Galian Cadas"])
         metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"])
 
-        panjang = st.number_input("Panjang Galian (m)", value=0)
-        lebar = st.number_input("Lebar Galian (m)", value=0)
-        kedalaman = st.number_input("Kedalaman Makadam", value=0)
+        panjang = st.number_input("Panjang Galian (m)", format="%.2f")
+        lebar = st.number_input("Lebar Galian (m)", format="%.2f")
+        kedalaman = st.number_input("Kedalaman Galian (m)", format="%.2f")
 
-        if st.button("Konfirmasi Galian", key="konfirmasi_galian"):
-            if panjang == 0 or lebar == 0 or kedalaman == 0:
+        if jenis_galian == "Galian Batu" and metode == "Manual":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_batu_manual = HSPK.GalianBatuManual(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_batu_manual.galian_batu_manual()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+                    
+
+        if jenis_galian == "Galian Tanah" and metode == "Manual":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_tanah_manual = HSPK.GalianTanahBiasaManual(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_tanah_manual.galian_tanah_biasa_manual()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Lumpur" and metode == "Manual":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_lumpur_manual = HSPK.GalianLumpurManual(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_lumpur_manual.galian_lumpur_manual()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Pasir" and metode == "Manual":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_pasir_manually = HSPK.GalianPasirManual(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_pasir_manually.galian_pasir_manual()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Cadas" and metode == "Manual":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_cadas_manual = HSPK.GalianTanahCadasManual(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_cadas_manual.galian_tanah_cadas_manual()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Batu" and metode == "Mekanis":
+            if kedalaman <= 1:
+                volume_galian = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                volume_galian = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                volume_galian = 'galian_3m'
+            else:
+                volume_galian = 'penambahan_1m'
+
+            galian_batu_mekanis = HSPK.GalianBatuDenganExcavator(panjang, lebar, kedalaman)
+            rab_galian = galian_batu_mekanis.galian_biasa_dengan_excavator()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Tanah" and metode == "Mekanis":
+            if kedalaman <= 1:
+                volume_galian = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                volume_galian = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                volume_galian = 'galian_3m'
+            else:
+                volume_galian = 'penambahan_1m'
+
+            galian_tanah_mekanis = HSPK.GalianTanahDenganExcavator(panjang, lebar, kedalaman)
+            rab_galian = galian_tanah_mekanis.galian_tanah_dengan_excavator()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Lumpur" and metode == "Mekanis":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_lumpur_mekanis = HSPK.GalianLumpurMekanis(panjang, lebar, kedalaman)
+            rab_galian = galian_lumpur_mekanis.galian_lumpur_mekanis()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Pasir" and metode == "Mekanis":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_pasir_manually = HSPK.GalianPasirManual(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_pasir_manually.galian_pasir_manual()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Cadas" and metode == "Mekanis":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_cadas_manual = HSPK.GalianTanahCadasManual(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_cadas_manual.galian_tanah_cadas_manual()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Batu" and metode == "Semi Mekanis":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_batu_semimekanis = HSPK.GalianBatuSemiMekanis(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_batu_semimekanis.galian_batu_semi_mekanis()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Tanah" and metode == "Semi Mekanis":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_tanah_semimekanis = HSPK.GalianTanahBiasaSemiMekanis(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_tanah_semimekanis.galian_tanah_biasa_semi_mekanis()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Lumpur" and metode == "Semi Mekanis":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_lumpur_semimekanis = HSPK.GalianLumpurSemiMekanis(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_lumpur_semimekanis.galian_lumpur_semi_mekanis()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Pasir" and metode == "Semi Mekanis":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_pasir_semimekanis = HSPK.GalianPasirSemiMekanis(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_pasir_semimekanis.galian_pasir_semi_mekanis()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+            
+
+        if jenis_galian == "Galian Cadas" and metode == "Semi Mekanis":
+            if kedalaman <= 1:
+                tipe_koefisien = 'galian_1m'
+            elif kedalaman >= 1 and kedalaman < 2:
+                tipe_koefisien = 'galian_2m'
+            elif kedalaman >= 2 and kedalaman < 3:
+                tipe_koefisien = 'galian_3m'
+            else:
+                tipe_koefisien = 'penambahan_1m'
+
+            galian_cadas_semimekanis = HSPK.GalianTanahCadasSemiMekanis(panjang, lebar, kedalaman, tipe_koefisien)
+            rab_galian = galian_cadas_semimekanis.galian_tanah_cadas_semi_mekanis()
+            
+            df_galian = pd.DataFrame(rab_galian['data'])
+
+             
+
+    if st.button("Konfirmasi Galian", key="konfirmasi_galian"):
+            if panjang == 0 or lebar == 0:
                 st.error("Mohon masukkan panjang, lebar, dan kedalaman yang valid sebelum melanjutkan.")
             else:
                 st.session_state.jalan_beton.update({
-                    'pekerjaan': "Galian",
                     'jenis_galian': jenis_galian,
                     'metode': metode,
-                    'panjang_galian': panjang,
-                    'lebar_galian': lebar,
-                    'kedalaman_galian': kedalaman,
+                    'panjang': panjang,
+                    'lebar': lebar,
+                    'kedalaman': kedalaman,
                 })
                 st.success("Input Galian disimpan! Lanjutkan ke Urugan.")
                 st.session_state.show_urugan_input = True
+                st.session_state.show_galian_input = False        
+
 
     # Bagian Urugan
     if st.session_state.get('show_urugan_input', False):
         st.write("### Pekerjaan Urugan")
-        panjang_urugan = st.number_input("Panjang Urugan (m)", value=0)
-        lebar_urugan = st.number_input("Lebar Urugan (m)", value=0)
+        panjang_urugan = st.number_input("Panjang Urugan (m)", format="%.2f")
+        lebar_urugan = st.number_input("Lebar Urugan (m)", format="%.2f")
+        kedalaman_urugan = st.number_input("Kedalaman Urugan (m)", format="%.2f")
+        pemadatan_urugan = st.selectbox("Jenis Pemadatan", ["Stamper", "Bulldozer"])
+
+        urugan_sirtu_padat = HSPK.Urugan(panjang_urugan, lebar_urugan, kedalaman_urugan, 'sirtu_padat')
+        rab_urugan = urugan_sirtu_padat.urugan()
+        
+        df_urugan = pd.DataFrame(rab_urugan['data'])
+
+
+        if pemadatan_urugan == "Stamper":
+            pemadatan_stamper = HSPK.PemadatanTanahDenganStamper(panjang_urugan, lebar_urugan, kedalaman_urugan)
+            rab_pemadatan = pemadatan_stamper.pemadatan_tanah_dengan_stamper()
+            
+            df_pemadatan = pd.DataFrame(rab_pemadatan['data'])
+            
+
+        else:
+            pemadatan_bulldozer = HSPK.PemadatanTanahDenganBulldozer(panjang_urugan, lebar_urugan, kedalaman_urugan)
+            rab_pemadatan = pemadatan_bulldozer.pemadatan_dengan_stamper()
+            
+            df_pemadatan = pd.DataFrame(rab_pemadatan['data'])
+
 
         if st.button("Konfirmasi Urugan", key="konfirmasi_urugan"):
             if panjang_urugan == 0 or lebar_urugan == 0:
-                st.error("Mohon masukkan panjang dan lebar yang valid sebelum melanjutkan.")
+                st.error("Mohon masukkan panjang dan lebar kedalaman yang valid sebelum melanjutkan.")
             else:
                 st.session_state.jalan_beton.update({
                     'panjang_urugan': panjang_urugan,
                     'lebar_urugan': lebar_urugan,
+                    'kedalaman_urugan': lebar_urugan,
+                    'pemadatan_urugan': pemadatan_urugan,
                 })
-                st.success("Input Urugan disimpan! Tekan tombol Submit untuk menyimpan semua data.")
-                st.session_state.show_paving_input = True
+                st.success("Input Urugan disimpan! Lanjutkan ke Pemadatan Beton.")
+                st.session_state.show_beton_input = True
+                st.session_state.show_urugan_input = False
 
-    #bagian pemasangan paving
-    if st.session_state.get('show_paving_input', False):
-        st.write("### Pemasangan Paving")
-        panjang_paving = st.number_input("Panjang Paving (m)", value=0)
-        lebar_paving = st.number_input("Lebar Paving (m)", value=0)
-        ketebalan_paving = st.radio("Ketebalan Paving", ["8 cm", "6 cm"])
+    # Bagian Pemadatan dan Pemasangan Beton
+    if st.session_state.get('show_beton_input', False):
+        st.write("### Pemadatan Beton")
+        mutu_beton = st.selectbox("Mutu Beton", ["K125", "K150", "K175", "K225", "K250", "K300"])
+        metode_pemadatan = st.selectbox("Pemadatan Beton", ["Manual", "Vibrator"])
+        metode_perancah = st.selectbox("Perancah", ["Kayu Jawa", "Dolken", "Bambu"])
+        panjang_pemadatan = st.number_input("Panjang Pemadatan (m)", format="%.2f")
+        lebar_pemadatan = st.number_input("Lebar Pemadatan (m)", format="%.2f")
+        kedalaman_pemadatan = st.number_input("Kedalaman Pemadatan (m)", format="%.2f")
+        ketebalan_beton = st.number_input("Ketebalan Beton (m)", format="%.2f")
 
-        if st.button("Konfirmasi Pemasangan Paving", key="konfirmasi_paving"):
-            if panjang_paving == 0 or lebar_paving == 0:
-                st.error("Mohon masukkan panjang, lebar, dan ketebalan yang valid sebelum melanjutkan.")
-            else:
-                st.session_state.jalan_beton.update({
-                    'panjang_paving': panjang_paving,
-                    'lebar_paving': lebar_paving,
-                    'ketebalan_paving': ketebalan_paving,
-                })
-                st.success("Input Pemasangan Paving disimpan! Tekan tombol Submit untuk menyimpan semua data.")
-                st.session_state.show_estimasi_input = True
+        if mutu_beton == "K125":
+            tipe_koefisien = 'beton_k125'
+        elif mutu_beton == "K150":
+            tipe_koefisien = 'beton_k150'
+        elif mutu_beton == "K175":
+            tipe_koefisien = 'beton_k175'
+        elif mutu_beton == "K225":
+            tipe_koefisien = 'beton_k225'
+        elif mutu_beton == "K250":
+            tipe_koefisien = 'beton_k250'
+        else:
+            tipe_koefisien = 'beton_k300'
+
+        pemilihan_mutu = HSPK.BetonReadyMix(panjang_pemadatan, lebar_pemadatan, tipe_koefisien)
+        rab_pemadatan = pemilihan_mutu.beton_readymix()
+            
+        df_mutu = pd.DataFrame(rab_pemadatan['data'])
+
+        if metode_perancah == "Kayu Jawa":
+            
+            perancah_kayu = HSPK.PerancahLantaiKayu(panjang_pemadatan, lebar_pemadatan)
+            rab_pemadatan = perancah_kayu.ahsp_perancah_lantai()
+            
+            df_perancah = pd.DataFrame(rab_pemadatan['data'])
+
+            
+        elif metode_perancah == "Dolken":
+                
+            perancah_dolken = HSPK.PerancahLantaiDolken(panjang_pemadatan, lebar_pemadatan)
+            rab_pemadatan = perancah_dolken.ahsp_perancah_lantai()
+            
+            df_perancah = pd.DataFrame(rab_pemadatan['data'])
+
+        else:
+            perancah_bambu = HSPK.PerancahLantaiBambu(panjang_pemadatan, lebar_pemadatan)
+            rab_pemadatan = perancah_bambu.ahsp_perancah_lantai()
+            
+            df_perancah = pd.DataFrame(rab_pemadatan['data'])
+
+
+    if st.button("Konfirmasi Pemasangan Paving", key="Konfirmasi_Pemasangan_Paving"):
+            st.session_state.jalan_beton.update({
+                'panjang_pemadatan': panjang_pemadatan,
+                'lebar_pemadatan': lebar_pemadatan,
+                'kedalaman_pemadatan': kedalaman_pemadatan,
+                'ketebalan_beton': ketebalan_beton,
+                'mutu_beton': mutu_beton,
+                'metode_pemadatan': metode_pemadatan,
+                'metode_perancah': metode_perancah})
+            st.success("Input Beton disimpan! Tekan tombol Submit untuk menyimpan semua data.")
+            st.session_state.show_estimasi_input = True
+            st.session_state.show_beton_input = False
 
     # Bagian Perhitungan Estimasi RAB
     if st.session_state.get('show_estimasi_input', False):
         st.write("### Perhitungan Estimasi RAB Pembuatan Jalan Beton")
 
         if st.button("Ekspor ke Excel"):
-            data = {
-                'Pekerjaan': ['Galian', 'Urugan','Pemasangan Paving'],
-                'Jenis': [st.session_state.jalan_beton.get('jenis_galian'), 'Urugan', 'Pemasangan Paving'],
-                'Metode': [st.session_state.jalan_beton.get('metode'), '', ''],
-                'Panjang (m)': [st.session_state.jalan_beton.get('panjang_galian'), st.session_state.jalan_beton.get('panjang_urugan'), st.session_state.jalan_beton.get('jalan_paving')],
-                'Lebar (m)': [st.session_state.jalan_beton.get('lebar_galian'), st.session_state.jalan_beton.get('lebar_urugan'), st.session_state.jalan_beton.get('lebar_paving')],
-                'Kedalaman': [st.session_state.jalan_beton.get('kedalaman_galian'), '', st.session_state.jalan_beton.get('ketebalan_paving')]
-            }
+            df_galian = pd.DataFrame(st.session_state.rab_galian['data'])
+            df_urugan = pd.DataFrame(st.session_state.rab_urugan['data'])
+            df_pemadatan = pd.DataFrame(st.session_state.rab_pemadatan['data'])
 
-            df = pd.DataFrame(data)
+        
 
-            # Convert dataframe to Excel format
-            output = BytesIO()
-            with pd.ExcelWriter(output, engine='openpyxl') as writer:
-                df.to_excel(writer, index=False, sheet_name='RAB Jalan Beton')
-            output.seek(0)
+            # # Convert dataframe to Excel format
+            # output = BytesIO()
+            # with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            #     df.to_excel(writer, index=False, sheet_name='RAB Jalan Beton')
+            # output.seek(0)
 
-            # Download the Excel file
-            st.download_button(
-                label="Download Excel",
-                data=output,
-                file_name="estimasi_rab_jalan_beton.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
+            # # Download the Excel file
+            # st.download_button(
+            #     label="Download Excel",
+            #     data=output,
+            #     file_name="estimasi_rab_jalan_beton.xlsx",
+            #     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            # )
 
         if st.button("Konfirmasi dan Selesai"):
             st.success("RAB telah berhasil direkapitulasi dan selesai.")
