@@ -1469,27 +1469,27 @@ KOEFISIEN_HSPK_BETON = {
 }
 # Beton Ready Mix
 class BetonReadyMix:
-    def __init__(self, panjang_jalan_beton, lebar_jalan_beton, tipe_koefisien):
+    def __init__(self, panjang_beton, lebar_beton, kedalaman_beton, tipe_koefisien):
         self.pekerja = None
         self.tukang = None
         self.kepala_tukang = None
         self.mandor = None
         self.concrete_pump = None
         self.ahsp_total = None
-        self.luas_jalan_beton = panjang_jalan_beton * lebar_jalan_beton
+        self.volume_jalan_beton = panjang_beton * lebar_beton * kedalaman_beton
         self.hspk_beton = KOEFISIEN_HSPK_BETON[tipe_koefisien]
 
     def tenaga(self):
-        self.pekerja = 1 * HSPK_PEKERJA * self.luas_jalan_beton
-        self.tukang = 0.25 * HSPK_TUKANG_BATU * self.luas_jalan_beton
-        self.kepala_tukang = 0.025 * HSPK_KEPALA_TUKANG * self.luas_jalan_beton
-        self.mandor = 0.1 * HSPK_MANDOR * self.luas_jalan_beton
+        self.pekerja = 1 * HSPK_PEKERJA * self.volume_jalan_beton
+        self.tukang = 0.25 * HSPK_TUKANG_BATU * self.volume_jalan_beton
+        self.kepala_tukang = 0.025 * HSPK_KEPALA_TUKANG * self.volume_jalan_beton
+        self.mandor = 0.1 * HSPK_MANDOR * self.volume_jalan_beton
         return self.pekerja + self.tukang + self.kepala_tukang + self.mandor
     def bahan(self):
-        self.beton = 1.02 * self.hspk_beton['nilai_hspk_beton'] * self.luas_jalan_beton
+        self.beton = 1.02 * self.hspk_beton['nilai_hspk_beton'] * self.volume_jalan_beton
         return self.beton
     def peralatan(self):
-        self.concrete_pump = 0.12 * HSPK_CONCRETE_PUMP * self.luas_jalan_beton
+        self.concrete_pump = 0.12 * HSPK_CONCRETE_PUMP * self.volume_jalan_beton
         return self.concrete_pump
     def ahsp_beton_readymix(self) :
         self.ahsp_total = self.tenaga() + self.bahan() + self.peralatan()
@@ -1510,7 +1510,7 @@ class BetonReadyMix:
                                 0.025, 
                                 0.1],
 
-                'Volume': [np.nan] + [self.luas_jalan_beton] * 6,
+                'Volume': [np.nan] + [self.volume_jalan_beton] * 6,
                 'Satuan': [np.nan,
                             SATUAN_BETON,
                             SATUAN_CONCRETE_PUMP, 
@@ -1916,7 +1916,7 @@ class PemadatanBetonDenganVibrator:
     def ahsp_pemadatan_beton_dengan_vibrator(self):
         self.ahsp_total = self.tenaga() + self.peralatan()
     
-    def pemadatan_dengan_stamper(self):
+    def pemadatan_beton_vibrator(self):
         self.tenaga()
         self.peralatan()
         self.ahsp_pemadatan_beton_dengan_vibrator()
