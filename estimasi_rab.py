@@ -131,7 +131,7 @@ def show_estimasi_rab():
             data_galian = {
                 'Uraian': ['Galian', 'Pertamina dex', 'Mesin Pompa Lumpur', 'Pekerja', 'Mandor'],
                 'Koefisien': [np.nan, 0.9, 0.0009, 0.24, 0.024],
-                'Volume': [np.nan] + [volume_galian] * 5,
+                'Volume': [np.nan] + [volume_galian] * 4,
                 'Satuan': [np.nan, 'liter', 'sewa-harian', 'OH', 'OH'],
                 'Harga Satuan': [np.nan, 13300, 339221000, 81500, 98000],
                 'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan]
