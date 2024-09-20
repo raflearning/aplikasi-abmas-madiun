@@ -2315,7 +2315,7 @@ class PerancahLantaiDolken:
     def perancah_lantai(self) :
         self.ahsp_total = self.tenaga() + self.bahan()
 
-    def ahsp_perancah_lantai_dolken(self):
+    def ahsp_perancah_lantai(self):
         self.tenaga()
         self.bahan()
         self.perancah_lantai()
@@ -2373,7 +2373,7 @@ class PerancahLantaiBambu:
     def perancah_lantai(self) :
         self.ahsp_total = self.tenaga() + self.bahan()
 
-    def ahsp_perancah_lantai_bambu(self):
+    def ahsp_perancah_lantai(self):
         self.tenaga()
         self.bahan()
         self.perancah_lantai()

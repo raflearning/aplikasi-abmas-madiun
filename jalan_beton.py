@@ -405,13 +405,13 @@ def jalan_beton_flow():
         elif metode_perancah == "Dolken":
                 
             perancah_dolken = HSPK.PerancahLantaiDolken(panjang_pemadatan, lebar_pemadatan)
-            rab_pemadatan = perancah_dolken.ahsp_perancah_lantai_dolken()
+            rab_pemadatan = perancah_dolken.ahsp_perancah_lantai()
             
             df_perancah = pd.DataFrame(rab_pemadatan['data'])
 
         else:
             perancah_bambu = HSPK.PerancahLantaiBambu(panjang_pemadatan, lebar_pemadatan)
-            rab_pemadatan = perancah_bambu.ahsp_perancah_lantai_bambu()
+            rab_pemadatan = perancah_bambu.ahsp_perancah_lantai()
             
             df_perancah = pd.DataFrame(rab_pemadatan['data'])
 
