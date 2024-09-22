@@ -3,8 +3,8 @@ import pandas as pd
 from io import BytesIO
 import numpy as np
 import HSPK
-# from openpyxl import Workbook
-# from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
 
 def jalan_paving_flow():
 
@@ -338,34 +338,95 @@ def jalan_paving_flow():
 
         st.write("### Perhitungan Estimasi RAB Pembuatan Jalan Paving")
 
-        if st.button("Ekspor ke Excel"):
+        if st.button("Hitung Estimasi"):
             df_galian = pd.DataFrame(st.session_state.rab_galian['data'])
-            df_urugan = pd.DataFrame(st.session_state.rab_urugan['data'])
-            df_pemadatan = pd.DataFrame(st.session_state.rab_pemadatan['data'])
-            df_pemasangan_paving = pd.DataFrame(st.session_state.rab_pemasangan_paving['data'])
+            rows_galian = list(dataframe_to_rows(df_galian, index=False, header=True))
 
-            # Menggabungkan semua data frame
-            df_combined = pd.concat([df_galian, df_urugan, df_pemadatan, df_pemasangan_paving], ignore_index=True)
+            df_urugan = pd.DataFrame(st.session_state.rab_urugan['data'])
+            rows_urugan = list(dataframe_to_rows(df_urugan, index=False, header=False))
+
+            df_pemadatan = pd.DataFrame(st.session_state.rab_pemadatan['data'])
+            rows_pemadatan = list(dataframe_to_rows(df_pemadatan, index=False, header=False))
+
+            df_pemasangan_paving = pd.DataFrame(st.session_state.rab_pemasangan_paving['data'])
+            rows_pemasangan_paving = list(dataframe_to_rows(df_pemasangan_paving, index=False, header=False))
 
             # Membuat workbook dan worksheet baru
             wb = Workbook()
             ws = wb.active
-            ws.title = "RAB Jalan Paving"
 
-            # Menambahkan data frame ke worksheet
-            for r in dataframe_to_rows(df_combined, index=False, header=True):
+            ws.title = "RAB Jalan Paving"
+            cur_row = 1
+
+            # Galian Data
+            subtotal_galian = 0
+            for r in rows_galian:
                 ws.append(r)
 
-            # Menggabungkan sel sesuai kebutuhan
-            ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=7)
-            ws.merge_cells(start_row=5, start_column=1, end_row=5, end_column=7)
-            ws.merge_cells(start_row=8, start_column=1, end_row=8, end_column=7)
-            ws.merge_cells(start_row=15, start_column=1, end_row=15, end_column=7)
+                # calc subtotal
+                if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_galian += r[-1]
+
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_galian])
+            if rows_galian:  # cek data galian tidak kosong
+                ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
+            cur_row = cur_row + len(rows_galian) + 1  # Update nilai cur_row setelah add data galian
+
+
+            # Urugan Data
+            subtotal_urugan = 0
+            for r in rows_urugan:
+                ws.append(r)
+
+                # calc subtotal
+                if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_urugan += r[-1]
+
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_urugan])
+            if rows_urugan:  # cek data urugan tidak kosong
+                ws.merge_cells(start_row=cur_row, start_column=1, end_row=cur_row, end_column=7)       
+            cur_row = cur_row + len(rows_urugan) + 1  # Update nilai cur_row setelah add data urugan
+
+
+            # Pemadatan Data
+            subtotal_pemadatan = 0
+            for r in rows_pemadatan:
+                ws.append(r)
+
+                # calc subtotal
+                if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_pemadatan += r[-1]
+
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_pemadatan])
+            if rows_pemadatan:  # cek data galian tidak kosong
+                ws.merge_cells(start_row=cur_row, start_column=1, end_row=cur_row, end_column=7)          
+            cur_row = cur_row + len(rows_pemadatan) + 1  # Update nilai cur_row setelah add data Pemadatan
+
+
+            # Pemasangan Paving Data
+            subtotal_pemasangan_paving = 0
+            for r in rows_pemasangan_paving:
+                ws.append(r)
+
+                # calc subtotat
+                if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_pemasangan_paving += r[-1]
+
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_pemasangan_paving])
+            if rows_pemasangan_paving:  # cek data galian tidak kosong
+                ws.merge_cells(start_row=cur_row, start_column=1, end_row=cur_row, end_column=7)   
+            cur_row = cur_row + len(rows_pemasangan_paving) + 1  # Update nilai cur_row setelah add data pemasangan paving
+
+            total = subtotal_galian + subtotal_urugan + subtotal_pemadatan + subtotal_pemasangan_paving
+            ws.append(['TOTAL', np.nan, np.nan, np.nan, np.nan, total])
 
             # Convert workbook to BytesIO
             output = BytesIO()
             wb.save(output)
             output.seek(0)
+            df = pd.read_excel(output)
+
+            st.dataframe(df, hide_index=True)
 
             # Download the Excel file
             st.download_button(
