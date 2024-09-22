@@ -328,7 +328,7 @@ def jalan_beton_flow():
         else:
             tipe_koefisien = 'beton_k300'
 
-        pemilihan_mutu = HSPK.BetonReadyMix(panjang_pemadatan, lebar_pemadatan, tipe_koefisien)
+        pemilihan_mutu = HSPK.BetonReadyMix(panjang_pemadatan, lebar_pemadatan, kedalaman_pemadatan, tipe_koefisien)
         rab_pemadatan = pemilihan_mutu.beton_readymix()
         st.session_state.rab_pemadatan = rab_pemadatan
 
