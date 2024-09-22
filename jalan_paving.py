@@ -444,5 +444,3 @@ def jalan_paving_flow():
 if __name__ == "__main__":
     st.title("Estimasi RAB")
     jalan_paving_flow()
-
-    #setiap rab bentuk dict dibentuk session state
