@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from io import BytesIO
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
 
 def jalan_makadam_flow():
     st.subheader("Jalan Makadam")
@@ -54,6 +56,7 @@ def jalan_makadam_flow():
                 })
                 st.success("Input Galian disimpan! Lanjutkan ke Urugan.")
                 st.session_state.show_urugan_input = True
+                # st.session_state.show_galian_input = False
 
     # Bagian Urugan
     if st.session_state.get('show_urugan_input', False):
@@ -75,6 +78,7 @@ def jalan_makadam_flow():
                 })
                 st.success("Input Urugan disimpan! Tekan tombol Submit untuk menyimpan semua data.")
                 st.session_state.show_estimasi_input = True
+                # st.session_state.show_urugan_input = False
  
             volume_galian = panjang * lebar * kedalaman
             luas_urugan = panjang_urugan * lebar_urugan * kedalaman_urugan
@@ -94,6 +98,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 81500, 98000],
                         'Jumlah': [np.nan] * 3
                     }
+                    st.session_state.data_galian = data_galian
                 elif metode == 'Semi Mekanis':
                     data_galian = {
                         'Uraian': ['Galian', 'Pertamina dex', 'Jack Hammer', 'Pekerja', 'Mandor'],
@@ -103,6 +108,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 13300, 44700, 81500, 98000],
                         'Jumlah': [np.nan] * 5
                     }
+                    st.session_state.data_galian = data_galian
                 elif metode == 'Mekanis':
                     data_galian = {
                         'Uraian': ['Galian', 'Compressor', 'Jack Hammer', 'Wheel Loader', 'Excavator', 'Dump Truck', 'Pekerja (Buruh Tidak Terampil)', 'Mandor'],
@@ -112,6 +118,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 212427.45, 38465.57, 538209.99, 819402.32, 339612.94, 81500, 98000],
                         'Jumlah': [np.nan] * 8
                     }
+                    st.session_state.data_galian = data_galian
             elif jenis_galian == 'Galian Tanah':
                 if metode == 'Manual':
                     data_galian = {
@@ -122,6 +129,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 81500, 98000],
                         'Jumlah': [np.nan] * 3
                     }
+                    st.session_state.data_galian = data_galian
                 elif metode == 'Semi Mekanis':
                     data_galian = {
                         'Uraian': ['Galian', 'Pertamina dex', 'Jack Hammer', 'Pekerja', 'Mandor'],
@@ -131,6 +139,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 13300, 44700, 81500, 98000],
                         'Jumlah': [np.nan] * 5
                     }
+                    st.session_state.data_galian = data_galian
                 if metode == 'Mekanis':
                     data_galian = {
                         'Uraian': ['Galian', 'Excavator','Pekerja', 'Mandor'],
@@ -140,6 +149,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 819402.32, 81500, 98000],
                         'Jumlah': [np.nan] * 4
                     }
+                    st.session_state.data_galian = data_galian
             elif jenis_galian == 'Galian Lumpur':
                 if metode == 'Manual':
                     data_galian = {
@@ -150,6 +160,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 81500, 98000],
                         'Jumlah': [np.nan, np.nan, np.nan]
                     }
+                    st.session_state.data_galian = data_galian
                 elif metode == 'Semi Mekanis':
                     data_galian = {
                         'Uraian': ['Galian', 'Pertamina dex', 'Mesin Pompa Lumpur', 'Pekerja', 'Mandor'],
@@ -159,6 +170,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 13300, 339221000, 81500, 98000],
                         'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan]
                     }
+                    st.session_state.data_galian = data_galian
                 elif metode == 'Mekanis':
                     data_galian = {
                         'Uraian': ['Galian', 'Dump Truck', 'Excavator', 'Pekerja', 'Mandor'],
@@ -168,6 +180,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 339612.94, 819402.32, 81500, 98000],
                         'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan]
                     }
+                    st.session_state.data_galian = data_galian
             elif jenis_galian == 'Galian Cadas':
                 if metode == 'Manual':
                     data_galian = {
@@ -178,6 +191,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 81500, 98000],
                         'Jumlah': [np.nan, np.nan, np.nan]
                     }
+                    st.session_state.data_galian = data_galian
                 elif metode == 'Semi Mekanis':
                     data_galian = {
                         'Uraian': ['Galian', 'Pertamina dex', 'Jack Hammer', 'Pekerja', 'Mandor'],
@@ -187,6 +201,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 13300, 44700, 81500, 98000],
                         'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan]
                     }
+                    st.session_state.data_galian = data_galian
             elif jenis_galian == 'Galian Pasir':
                 if metode == 'Manual':
                     data_galian = {
@@ -197,6 +212,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 81500, 98000],
                         'Jumlah': [np.nan, np.nan, np.nan]
                     }
+                    st.session_state.data_galian = data_galian
                 elif metode == 'Semi Mekanis':
                     data_galian = {
                         'Uraian': ['Galian', 'Pertamina dex', 'Mesin Pompa Lumpur', 'Pekerja', 'Mandor'],
@@ -206,6 +222,7 @@ def jalan_makadam_flow():
                         'Harga Satuan': [np.nan, 13300, 339221000, 81500, 98000],
                         'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan]
                     }
+                    st.session_state.data_galian = data_galian
         
             else:
                 st.warning("Jenis galian tidak valid atau belum dipilih.")
@@ -221,8 +238,7 @@ def jalan_makadam_flow():
                     'Harga Satuan': [np.nan, 198350, 325000, 233300, 81500, 98000],
                     'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
             }
-
-            data_pemadatan = None
+            st.session_state.data_urugan = data_urugan
 
         # Definisi data untuk tabel pemadatan
             if pemadatan_urugan == 'Stamper':
@@ -233,7 +249,8 @@ def jalan_makadam_flow():
                     'Satuan': [np.nan, 'sewa-hari', 'OH', 'OH', 'OH'],
                     'Harga Satuan': [np.nan, 26050, 81500, 93000, 98000],
                     'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan]
-            }
+                }
+                st.session_state.data_pemadatan = data_pemadatan
             elif pemadatan_urugan == 'Bulldozer':
                 data_pemadatan = {
                     'Uraian': ['Pemadatan Tanah', 'Bulldozer', 'Water Tanker','Roller Vibrator','Pekerja', 'Mandor'],
@@ -242,60 +259,90 @@ def jalan_makadam_flow():
                     'Satuan': [np.nan, 'jam', 'jam', 'jam', 'jam', 'jam'],
                     'Harga Satuan': [np.nan, 876843.85, 317296.73, 464580, 81500, 98000],
                     'Jumlah': [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
-            } 
-            # data_pemadatanMembuat DataFrame untuk tabel galian dan urugan
-            df_galian = pd.DataFrame(data_galian)
-            df_urugan = pd.DataFrame(data_urugan)
-            df_pemadatan = pd.DataFrame(data_pemadatan)
+                }
+                st.session_state.data_pemadatan = data_pemadatan
+
+    if st.session_state.get('show_estimasi_input', False):
+        if st.button("Hitung Estimasi"):
+            df_galian = pd.DataFrame(st.session_state.data_galian)
+            df_galian['Jumlah'] = df_galian['Volume'] * df_galian['Koefisien'] * df_galian['Harga Satuan']
+            rows_galian = list(dataframe_to_rows(df_galian, index=False, header=True))
+
+            df_urugan = pd.DataFrame(st.session_state.data_urugan)
+            df_urugan['Jumlah'] = df_galian['Volume'] * df_urugan['Koefisien'] * df_urugan['Harga Satuan']
+            rows_urugan = list(dataframe_to_rows(df_urugan, index=False, header=False))
+
+            df_pemadatan = pd.DataFrame(st.session_state.data_pemadatan)
+            df_pemadatan['Jumlah'] = df_pemadatan['Volume'] * df_pemadatan['Koefisien'] * df_pemadatan['Harga Satuan']
+            rows_pemadatan = list(dataframe_to_rows(df_pemadatan, index=False, header=False))
+
+            # Membuat workbook dan worksheet baru
+            wb = Workbook()
+            ws = wb.active
+
+            ws.title = "RAB Jalan Beton"
+            cur_row = 1
+
+            # Galian Data
+            subtotal_galian = 0
+            for r in rows_galian:
+                ws.append(r)
+
+                # calc subtotal
+                if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_galian += r[-1]
+
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_galian])
+            if rows_galian:  # cek data galian tidak kosong
+                ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
+            cur_row = cur_row + len(rows_galian) + 1  # Update nilai cur_row setelah add data galian
 
 
-            # Menggabungkan tabel galian dengan urugan
-            df_final = pd.concat([df_galian, df_urugan, df_pemadatan], ignore_index=True)
+            # Urugan Data
+            subtotal_urugan = 0
+            for r in rows_urugan:
+                ws.append(r)
 
-            # Menghitung kolom 'Jumlah' sebagai hasil perkalian 'Volume', 'Koefisien', dan 'Harga Satuan'
-            df_final['Jumlah'] = df_final['Volume'] * df_final['Koefisien'] * df_final['Harga Satuan']
+                # calc subtotal
+                if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_urugan += r[-1]
 
-            # Menghitung total jumlah
-            total_jumlah_sum = df_final['Jumlah'].sum()
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_urugan])
+            if rows_urugan:  # cek data urugan tidak kosong
+                ws.merge_cells(start_row=cur_row, start_column=1, end_row=cur_row, end_column=7)       
+            cur_row = cur_row + len(rows_urugan) + 1  # Update nilai cur_row setelah add data urugan
 
-            # Menghitung margin 11%
-            margin = total_jumlah_sum * 0.11
 
-            total_jumlah_sum_margin = df_final['Jumlah'].sum() + margin
+            # Pemadatan Data
+            subtotal_pemadatan = 0
+            for r in rows_pemadatan:
+                ws.append(r)
 
-            # Membuat DataFrame dengan total dan margin
-            total_jumlah = pd.DataFrame({
-                'Uraian': ['Total', 'Margin', 'Total Setelah Margin'],
-                'Koefisien': [np.nan, np.nan, np.nan],
-                'Volume': [np.nan, np.nan, np.nan],
-                'Satuan': [np.nan, np.nan, np.nan],
-                'Harga Satuan': [np.nan, np.nan, np.nan],
-                'Jumlah': [total_jumlah_sum, margin, total_jumlah_sum_margin]
-            })
+                # calc subtotal
+                if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_pemadatan += r[-1]
 
-     
-            # Menggabungkan `df_final` dengan `total_jumlah` untuk menampilkan hasil akhir
-            df_final_with_margin = pd.concat([df_final, total_jumlah], ignore_index=True)
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_pemadatan])
+            if rows_pemadatan:  # cek data galian tidak kosong
+                ws.merge_cells(start_row=cur_row, start_column=1, end_row=cur_row, end_column=7)          
+            cur_row = cur_row + len(rows_pemadatan) + 1  # Update nilai cur_row setelah add data Pemadatan
 
-            # Menampilkan DataFrame gabungan di Streamlit
-            st.write("### Tabel Estimasi RAB")
-            st.dataframe(df_final_with_margin)
+            total = subtotal_galian + subtotal_urugan + subtotal_pemadatan
+            ws.append(['TOTAL', np.nan, np.nan, np.nan, np.nan, total])
 
-            # Convert DataFrame to Excel for download
-            def to_excel(df):
-                output = BytesIO()
-                with pd.ExcelWriter(output, engine='openpyxl') as writer:
-                    df.to_excel(writer, index=False, sheet_name='Estimasi RAB')
-                output.seek(0)
-                return output
+            # Convert workbook to BytesIO
+            output = BytesIO()
+            wb.save(output)
+            output.seek(0)
+            df = pd.read_excel(output)
 
-            excel_data = to_excel(df_final_with_margin)
+            st.dataframe(df, hide_index=True)
 
-            # Download button
+            # Download the Excel file
             st.download_button(
                 label="Download Excel",
-                data=excel_data,
-                file_name="estimasi_rab.xlsx",
+                data=output,
+                file_name="estimasi_rab_jalan_makadam.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 
@@ -303,6 +350,6 @@ def jalan_makadam_flow():
             st.success("Estimasi RAB telah berhasil direkapitulasi.")
             st.balloons()
 
-    if __name__ == "__main__":
-        st.title("Estimasi RAB")
-        show_estimasi_rab()
+if __name__ == "__main__":
+    st.title("Estimasi RAB")
+    jalan_makadam_flow()
