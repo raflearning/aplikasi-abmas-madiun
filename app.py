@@ -34,8 +34,8 @@ def main():
             jalan_beton_flow()
         elif jalan_choice == "Jalan Makadam":
             jalan_makadam_flow()
-    elif choice == "Saluran Drainase":
-        saluran_drainase_flow()
+    # elif choice == "Saluran Drainase":
+    #     saluran_drainase_flow()
     elif choice == "Estimasi RAB":
         show_estimasi_rab()
 
