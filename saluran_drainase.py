@@ -5,32 +5,35 @@ import HSPK
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-def jalan_beton_flow():
-    st.subheader("Jalan Beton")
+def saluran_drainase_flow():
+    st.subheader("Saluran Drainase")
 
     # Menambahkan 3 kolom untuk gambar di bagian atas
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
 
     with col1:
-        st.image("assets/jalan beton 1.jpg", caption="1", use_column_width=True)
+        st.image("assets/drainase 1.jpg", caption="1", use_column_width=True)
 
     with col2:
-        st.image("assets/jalan beton 2.jpg", caption="2", use_column_width=True)
-
-    with col3:
-        st.image("assets/jalan beton 3.jpg", caption="3", use_column_width=True)
+        st.image("assets/drainase 2.jpg", caption="2", use_column_width=True)
 
     if st.button("Mulai Input"):
         st.session_state.jalan_beton = {}
         st.session_state.show_galian_input = True
+        st.session_state.show_beton_a_input = False
+        st.session_state.show_beton_b_input = False
         st.session_state.show_urugan_input = False
-        st.session_state.show_beton_input = False
+        st.session_state.show_pemadatan_input = False
         st.session_state.show_estimasi_input = False
 
         st.session_state.rab_galian = None
+        st.session_state.rab_beton_a = None
+        st.session_state.rab_beton_b = None
+        st.session_state.rab_perancah_a = None
+        st.session_state.rab_perancah_a = None
         st.session_state.rab_urugan = None
         st.session_state.rab_pemadatan = None
-        st.session_state.rab_perancah = None
+        
 
     # Bagian Galian
     if st.session_state.get('show_galian_input', False):
@@ -263,10 +266,137 @@ def jalan_beton_flow():
                     'lebar': lebar,
                     'kedalaman': kedalaman,
                 })
-                st.success("Input Galian disimpan! Lanjutkan ke Urugan.")
-                st.session_state.show_urugan_input = True
+                st.success("Input Galian disimpan! Lanjutkan ke Beton Sisi A.")
+                st.session_state.show_beton_a_input = True
                 st.session_state.show_galian_input = False        
 
+    #Bagian Beton A
+    if st.session_state.get('show_beton_a_input', False):
+        st.write("### Pembuatan Beton Darinase Bagian (A)")
+        mutu_beton = st.selectbox("Mutu Beton", ["K125", "K150", "K175", "K225", "K250", "K300"], key = 'mutua')
+        metode_perancah = st.selectbox("Bekisting & Perancah", ["Kayu Jawa", "Dolken", "Bambu"], key = 'perancaha')
+        panjang_beton = st.number_input("Panjang Beton (m)", format="%.2f", key = 'panjanga')
+        lebar_beton = st.number_input("Lebar Beton (m)", format="%.2f", key = 'lebara')
+        ketebalan_beton = st.number_input("Ketebalan Beton (m)", format="%.2f", key = 'tebala')
+        ketebalan_bekisting = st.selectbox("Jenis Bekisting", ['multipleks 12mm', 'multipleks 18mm'], key = 'bekistinga')
+
+        if mutu_beton == "K125":
+            tipe_koefisien = 'beton_k125'
+        elif mutu_beton == "K150":
+            tipe_koefisien = 'beton_k150'
+        elif mutu_beton == "K175":
+            tipe_koefisien = 'beton_k175'
+        elif mutu_beton == "K225":
+            tipe_koefisien = 'beton_k225'
+        elif mutu_beton == "K250":
+            tipe_koefisien = 'beton_k250'
+        else:
+            tipe_koefisien = 'beton_k300'
+
+        pemilihan_mutu = HSPK.BetonReadyMix(panjang_beton, lebar_beton, tipe_koefisien)
+        rab_beton_a = pemilihan_mutu.beton_readymix()
+        st.session_state.rab_beton_a = rab_beton_a
+
+        if ketebalan_bekisting == 'multipleks 12mm':
+            tipe_koefisien = 'multipleks_12mm'
+        else: 
+            tipe_koefisien = 'multipleks_18mm'
+
+        bekisting_lantai = HSPK.BekistingLantai(panjang_beton, lebar_beton, tipe_koefisien)
+        rab_bekisting_a = bekisting_lantai.bekisting_lantai()
+        st.session_state.rab_bekisting_a = rab_bekisting_a
+        
+        if metode_perancah == "Kayu Jawa":
+            perancah_kayu = HSPK.PerancahLantaiKayu(panjang_beton, lebar_beton)
+            rab_perancah_a = perancah_kayu.ahsp_perancah_lantai()
+            st.session_state.rab_perancah_a = rab_perancah_a
+
+        elif metode_perancah == "Dolken":
+
+            perancah_dolken = HSPK.PerancahLantaiDolken(panjang_beton, lebar_beton)
+            rab_perancahA = perancah_dolken.ahsp_perancah_lantai()
+            st.session_state.rab_perancahA = rab_perancahA
+
+        else:
+            perancah_bambu = HSPK.PerancahLantaiBambu(panjang_beton, lebar_beton)
+            rab_perancah_a = perancah_bambu.ahsp_perancah_lantai()
+            st.session_state.rab_perancah_a = rab_perancah_a
+
+        if st.button("Konfirmasi Beton Sisi A", key="Konfirmasi_Pembuatan_Beton_a"):
+            st.session_state.jalan_beton.update({
+                'panjang_beton': panjang_beton,
+                'lebar_beton': lebar_beton,
+                'ketebalan_beton': ketebalan_beton,
+                'mutu_beton': mutu_beton,
+                'ketebalan_bekisting' : ketebalan_bekisting,
+                'metode_perancah': metode_perancah})
+            st.success("Input Beton Sisi A disimpan! Lanjut ke Beton Sisi B")
+            st.session_state.show_beton_b_input = True
+            st.session_state.show_beton_a_input = False
+
+    #Bagian Beton B
+    if st.session_state.get('show_beton_b_input', False):
+        st.write("### Pembuatan Beton Darinase Bagian (B)")
+        mutu_beton = st.selectbox("Mutu Beton", ["K125", "K150", "K175", "K225", "K250", "K300"], key = 'mutub')
+        metode_perancah = st.selectbox("Bekisting & Perancah", ["Kayu Jawa", "Dolken", "Bambu"], key = 'perancahb')
+        panjang_beton = st.number_input("Panjang Beton (m)", format="%.2f", key = 'panjangb')
+        lebar_beton = st.number_input("Lebar Beton (m)", format="%.2f", key = 'lebarb')
+        ketebalan_beton = st.number_input("Ketebalan Beton (m)", format="%.2f", key = 'tebab')
+        ketebalan_bekisting = st.selectbox("Jenis Bekisting", ['multipleks 12mm', 'multipleks 18mm'], key = 'bekistingb')
+
+        if mutu_beton == "K125":
+            tipe_koefisien = 'beton_k125'
+        elif mutu_beton == "K150":
+            tipe_koefisien = 'beton_k150'
+        elif mutu_beton == "K175":
+            tipe_koefisien = 'beton_k175'
+        elif mutu_beton == "K225":
+            tipe_koefisien = 'beton_k225'
+        elif mutu_beton == "K250":
+            tipe_koefisien = 'beton_k250'
+        else:
+            tipe_koefisien = 'beton_k300'
+
+        pemilihan_mutu = HSPK.BetonReadyMix(panjang_beton, lebar_beton, tipe_koefisien)
+        rab_beton_b = pemilihan_mutu.beton_readymix()
+        st.session_state.rab_beton_b = rab_beton_b
+
+        if ketebalan_bekisting == 'multipleks 12mm':
+            tipe_koefisien = 'multipleks_12mm'
+        else: 
+            tipe_koefisien = 'multipleks_18mm'
+
+        bekisting_lantai = HSPK.BekistingLantai(panjang_beton, lebar_beton, tipe_koefisien)
+        rab_bekisting_b = bekisting_lantai.bekisting_lantai()
+        st.session_state.rab_bekisting_b = rab_bekisting_b
+        
+        if metode_perancah == "Kayu Jawa":
+            perancah_kayu = HSPK.PerancahLantaiKayu(panjang_beton, lebar_beton)
+            rab_perancah_b = perancah_kayu.ahsp_perancah_lantai()
+            st.session_state.rab_perancah_b = rab_perancah_b
+
+        elif metode_perancah == "Dolken":
+
+            perancah_dolken = HSPK.PerancahLantaiDolken(panjang_beton, lebar_beton)
+            rab_perancah_b = perancah_dolken.ahsp_perancah_lantai()
+            st.session_state.rab_perancah_b = rab_perancah_b
+
+        else:
+            perancah_bambu = HSPK.PerancahLantaiBambu(panjang_beton, lebar_beton)
+            rab_perancah_b = perancah_bambu.ahsp_perancah_lantai()
+            st.session_state.rab_perancah_b = rab_perancah_b
+
+        if st.button("Konfirmasi Beton Sisi B", key="Konfirmasi_Pembuatan_Beton_b"):
+            st.session_state.jalan_beton.update({
+                'panjang_beton': panjang_beton,
+                'lebar_beton': lebar_beton,
+                'ketebalan_beton': ketebalan_beton,
+                'mutu_beton': mutu_beton,
+                'ketebalan_bekisting' : ketebalan_bekisting,
+                'metode_perancah': metode_perancah})
+            st.success("Input Pembuatan Beton Sisi B disimpan! Lanjut ke Urugan")
+            st.session_state.show_urugan_input = True
+            st.session_state.show_beton_b_input = False
 
     # Bagian Urugan
     if st.session_state.get('show_urugan_input', False):
@@ -300,67 +430,9 @@ def jalan_beton_flow():
                     'kedalaman_urugan': lebar_urugan,
                     'pemadatan_urugan': pemadatan_urugan,
                 })
-                st.success("Input Urugan disimpan! Lanjutkan ke Pemadatan Beton.")
-                st.session_state.show_beton_input = True
+                st.success("Input Urugan disimpan! Dapatkan Estimasinya.")
+                st.session_state.show_estimasi_input = True
                 st.session_state.show_urugan_input = False
-
-    # Bagian Pemadatan dan Pemasangan Beton
-    if st.session_state.get('show_beton_input', False):
-        st.write("### Pemadatan Beton")
-        mutu_beton = st.selectbox("Mutu Beton", ["K125", "K150", "K175", "K225", "K250", "K300"])
-        metode_pemadatan = st.selectbox("Pemadatan Beton", ["Manual", "Vibrator"])
-        metode_perancah = st.selectbox("Perancah", ["Kayu Jawa", "Dolken", "Bambu"])
-        panjang_pemadatan = st.number_input("Panjang Pemadatan (m)", format="%.2f")
-        lebar_pemadatan = st.number_input("Lebar Pemadatan (m)", format="%.2f")
-        kedalaman_pemadatan = st.number_input("Kedalaman Pemadatan (m)", format="%.2f")
-        ketebalan_beton = st.number_input("Ketebalan Beton (m)", format="%.2f")
-
-        if mutu_beton == "K125":
-            tipe_koefisien = 'beton_k125'
-        elif mutu_beton == "K150":
-            tipe_koefisien = 'beton_k150'
-        elif mutu_beton == "K175":
-            tipe_koefisien = 'beton_k175'
-        elif mutu_beton == "K225":
-            tipe_koefisien = 'beton_k225'
-        elif mutu_beton == "K250":
-            tipe_koefisien = 'beton_k250'
-        else:
-            tipe_koefisien = 'beton_k300'
-
-        pemilihan_mutu = HSPK.BetonReadyMix(panjang_pemadatan, lebar_pemadatan, tipe_koefisien)
-        rab_pemadatan = pemilihan_mutu.beton_readymix()
-        st.session_state.rab_pemadatan = rab_pemadatan
-
-        if metode_perancah == "Kayu Jawa":
-            
-            perancah_kayu = HSPK.PerancahLantaiKayu(panjang_pemadatan, lebar_pemadatan)
-            rab_perancah = perancah_kayu.ahsp_perancah_lantai()
-            st.session_state.rab_perancah = rab_perancah
-
-        elif metode_perancah == "Dolken":
-                
-            perancah_dolken = HSPK.PerancahLantaiDolken(panjang_pemadatan, lebar_pemadatan)
-            rab_perancah = perancah_dolken.ahsp_perancah_lantai()
-            st.session_state.rab_perancah = rab_perancah
-
-        else:
-            perancah_bambu = HSPK.PerancahLantaiBambu(panjang_pemadatan, lebar_pemadatan)
-            rab_perancah = perancah_bambu.ahsp_perancah_lantai()
-            st.session_state.rab_perancah = rab_perancah
-
-        if st.button("Konfirmasi Pemadatan Beton", key="Konfirmasi_Pemadatan_Beton"):
-            st.session_state.jalan_beton.update({
-                'panjang_pemadatan': panjang_pemadatan,
-                'lebar_pemadatan': lebar_pemadatan,
-                'kedalaman_pemadatan': kedalaman_pemadatan,
-                'ketebalan_beton': ketebalan_beton,
-                'mutu_beton': mutu_beton,
-                'metode_pemadatan': metode_pemadatan,
-                'metode_perancah': metode_perancah})
-            st.success("Input Beton disimpan! Tekan tombol Submit untuk menyimpan semua data.")
-            st.session_state.show_estimasi_input = True
-            st.session_state.show_beton_input = False
 
     # Bagian Perhitungan Estimasi RAB
     if st.session_state.get('show_estimasi_input', False):
@@ -368,17 +440,20 @@ def jalan_beton_flow():
 
         if st.button("Ekspor ke Excel"):
             df_galian = pd.DataFrame(st.session_state.rab_galian['data'])
+            df_beton_a = pd.DataFrame(st.session_state.rab_beton_a['data']) 
+            df_beton_b = pd.DataFrame(st.session_state.rab_beton_b['data'])
+            df_perancah_a = pd.DataFrame(st.session_state.rab_perancah_a['data'])      
+            df_perancah_b = pd.DataFrame(st.session_state.rab_perancah_b['data'])
             df_urugan = pd.DataFrame(st.session_state.rab_urugan['data'])
             df_pemadatan = pd.DataFrame(st.session_state.rab_pemadatan['data'])
-            df_perancah = pd.DataFrame(st.session_state.rab_perancah['data'])      
-
+            
             # Menggabungkan semua data frame
-            df_combined = pd.concat([df_galian, df_urugan, df_pemadatan, df_perancah], ignore_index=True)
+            df_combined = pd.concat([df_galian, df_beton_a, df_beton_b, df_perancah_a, df_perancah_b, df_urugan, df_pemadatan], ignore_index=True)
 
             # Membuat workbook dan worksheet baru
             wb = Workbook()
             ws = wb.active
-            ws.title = "RAB Jalan Beton"
+            ws.title = "RAB Drainase"
 
             # Menambahkan data frame ke worksheet
             for r in dataframe_to_rows(df_combined, index=False, header=True):
@@ -399,7 +474,7 @@ def jalan_beton_flow():
             st.download_button(
                 label="Download Excel",
                 data=output,
-                file_name="estimasi_rab_jalan_beton.xlsx",
+                file_name="estimasi_rab_drainase.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 
@@ -409,4 +484,5 @@ def jalan_beton_flow():
 
 if __name__ == "__main__":
     st.title("Estimasi RAB")
-    jalan_beton_flow()
+    saluran_drainase_flow()
+
