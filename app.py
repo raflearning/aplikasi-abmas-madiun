@@ -2,7 +2,7 @@ import streamlit as st
 from jalan_paving import jalan_paving_flow
 from jalan_beton import jalan_beton_flow
 from jalan_makadam import jalan_makadam_flow
-# from saluran_drainase import saluran_drainase_flow
+from saluran_drainase import saluran_drainase_flow
 from estimasi_rab import show_estimasi_rab
 
 def main():
@@ -34,8 +34,8 @@ def main():
             jalan_beton_flow()
         elif jalan_choice == "Jalan Makadam":
             jalan_makadam_flow()
-    # elif choice == "Saluran Drainase":
-    #     saluran_drainase_flow()
+    elif choice == "Saluran Drainase":
+        saluran_drainase_flow()
     elif choice == "Estimasi RAB":
         show_estimasi_rab()
 
