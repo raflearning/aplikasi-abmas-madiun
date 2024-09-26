@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from io import BytesIO
 import HSPK
 from openpyxl import Workbook
@@ -293,13 +294,13 @@ def saluran_drainase_flow():
         else:
             tipe_koefisien = 'beton_k300'
 
-        pemilihan_mutu = HSPK.BetonReadyMix(panjang_beton, lebar_beton, tipe_koefisien)
+        pemilihan_mutu = HSPK.BetonReadyMix(panjang_beton, lebar_beton, ketebalan_beton, tipe_koefisien)
         rab_beton_a = pemilihan_mutu.beton_readymix()
         st.session_state.rab_beton_a = rab_beton_a
 
         if ketebalan_bekisting == 'multipleks 12mm':
             tipe_koefisien = 'multipleks_12mm'
-        else: 
+        else:
             tipe_koefisien = 'multipleks_18mm'
 
         bekisting_lantai = HSPK.BekistingLantai(panjang_beton, lebar_beton, tipe_koefisien)
@@ -357,7 +358,7 @@ def saluran_drainase_flow():
         else:
             tipe_koefisien = 'beton_k300'
 
-        pemilihan_mutu = HSPK.BetonReadyMix(panjang_beton, lebar_beton, tipe_koefisien)
+        pemilihan_mutu = HSPK.BetonReadyMix(panjang_beton, lebar_beton, ketebalan_beton, tipe_koefisien)
         rab_beton_b = pemilihan_mutu.beton_readymix()
         st.session_state.rab_beton_b = rab_beton_b
 
@@ -436,39 +437,141 @@ def saluran_drainase_flow():
 
     # Bagian Perhitungan Estimasi RAB
     if st.session_state.get('show_estimasi_input', False):
-        st.write("### Perhitungan Estimasi RAB Pembuatan Jalan Beton")
+        st.write("### Perhitungan Estimasi RAB Pembuatan Saluran")
 
-        if st.button("Ekspor ke Excel"):
+        if st.button("Hitung Estimasi"):
             df_galian = pd.DataFrame(st.session_state.rab_galian['data'])
-            df_beton_a = pd.DataFrame(st.session_state.rab_beton_a['data']) 
-            df_beton_b = pd.DataFrame(st.session_state.rab_beton_b['data'])
-            df_perancah_a = pd.DataFrame(st.session_state.rab_perancah_a['data'])      
-            df_perancah_b = pd.DataFrame(st.session_state.rab_perancah_b['data'])
-            df_urugan = pd.DataFrame(st.session_state.rab_urugan['data'])
-            df_pemadatan = pd.DataFrame(st.session_state.rab_pemadatan['data'])
-            
-            # Menggabungkan semua data frame
-            df_combined = pd.concat([df_galian, df_beton_a, df_beton_b, df_perancah_a, df_perancah_b, df_urugan, df_pemadatan], ignore_index=True)
+            rows_galian = list(dataframe_to_rows(df_galian, index=False, header=True))
 
+            df_beton_a = pd.DataFrame(st.session_state.rab_beton_a['data'])
+            rows_beton_a = list(dataframe_to_rows(df_beton_a, index=False, header=True))
+ 
+            df_beton_b = pd.DataFrame(st.session_state.rab_beton_b['data'])
+            rows_beton_b = list(dataframe_to_rows(df_beton_b, index=False, header=True))
+
+            df_perancah_a = pd.DataFrame(st.session_state.rab_perancah_a['data'])
+            rows_perancah_a = list(dataframe_to_rows(df_perancah_a, index=False, header=True))
+      
+            df_perancah_b = pd.DataFrame(st.session_state.rab_perancah_b['data'])
+            rows_perancah_b = list(dataframe_to_rows(df_perancah_b, index=False, header=True))
+
+            df_urugan = pd.DataFrame(st.session_state.rab_urugan['data'])
+            rows_urugan = list(dataframe_to_rows(df_urugan, index=False, header=True))
+
+            df_pemadatan = pd.DataFrame(st.session_state.rab_pemadatan['data'])
+            rows_pemadatan = list(dataframe_to_rows(df_pemadatan, index=False, header=True))
+            
             # Membuat workbook dan worksheet baru
             wb = Workbook()
             ws = wb.active
             ws.title = "RAB Drainase"
-
-            # Menambahkan data frame ke worksheet
-            for r in dataframe_to_rows(df_combined, index=False, header=True):
+            cur_row = 1
+            
+            # Galian Data
+            subtotal_galian = 0
+            for r in rows_galian:
                 ws.append(r)
 
-            # Menggabungkan sel sesuai kebutuhan
-            ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=7)
-            ws.merge_cells(start_row=5, start_column=1, end_row=5, end_column=7)
-            ws.merge_cells(start_row=8, start_column=1, end_row=8, end_column=7)
-            ws.merge_cells(start_row=15, start_column=1, end_row=15, end_column=7)
+                # Cacl subtotal
+                if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_galian += r[-1]
+            
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_galian])
+            if rows_galian: # Cek data galian tidak kosong
+                ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
+            cur_row = cur_row + len(rows_galian) + 1  # Update nilai cur_row setelah add data galian
+            
+            #  Beton A Data
+            subtotal_beton_a = 0
+            for r in rows_beton_a:
+                ws.append(r)
+
+                # Cacl subtotal
+                if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_beton_a += r[-1]
+            
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_beton_a])
+            if rows_beton_a: # Cek data beton a tidak kosong
+                ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
+            cur_row = cur_row + len(rows_beton_a) + 1  # Update nilai cur_row setelah add data beton a
+
+            # Beton B Data
+            subtotal_beton_b = 0
+            for r in rows_beton_b:
+                ws.append(r)
+
+                # Cacl subtotal
+                if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_beton_b += r[-1]
+            
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_beton_b])
+            if rows_beton_b: # Cek data beton b tidak kosong
+                ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
+            cur_row = cur_row + len(rows_beton_b) + 1  # Update nilai cur_row setelah add data beton b
+
+            #  Perancah A Data
+            subtotal_perancah_a = 0
+            for r in rows_perancah_a:
+                ws.append(r)
+
+                # Cacl subtotal
+                if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_perancah_a += r[-1]
+            
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_perancah_a])
+            if rows_perancah_a: # Cek data perancah a tidak kosong
+                ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
+            cur_row = cur_row + len(rows_perancah_a) + 1  # Update nilai cur_row setelah add data perancah a
+
+            # Perancah B Data
+            subtotal_perancah_b = 0
+            for r in rows_perancah_b:
+                ws.append(r)
+
+                # Cacl subtotal
+                if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_perancah_b += r[-1]
+            
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_perancah_b])
+            if rows_perancah_b: # Cek data perancah b tidak kosong
+                ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
+            cur_row = cur_row + len(rows_perancah_b) + 1  # Update nilai cur_row setelah add data perancah b
+
+            # Urugan Data
+            subtotal_urugan = 0
+            for r in rows_urugan:
+                ws.append(r)
+
+                # Cacl subtotal
+                if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_urugan += r[-1]
+            
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_urugan])
+            if rows_urugan: # Cek data urugan tidak kosong
+                ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
+            cur_row = cur_row + len(rows_urugan) + 1  # Update nilai cur_row setelah add data urugan
+
+            # Pemadatan Data
+            subtotal_pemadatan = 0
+            for r in rows_pemadatan:
+                ws.append(r)
+
+                # Cacl subtotal
+                if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
+                    subtotal_pemadatan += r[-1]
+            
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_pemadatan])
+            if rows_pemadatan: # Cek data pemadatan tidak kosong
+                ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
+            cur_row = cur_row + len(rows_pemadatan) + 1  # Update nilai cur_row setelah add data pemadatan
 
             # Convert workbook to BytesIO
             output = BytesIO()
             wb.save(output)
             output.seek(0)
+            df = pd.read_excel(output)
+
+            st.dataframe(df, hide_index=True)
 
             # Download the Excel file
             st.download_button(
