@@ -367,7 +367,7 @@ def jalan_paving_flow():
                 if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
                     subtotal_galian += r[-1]
 
-            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_galian])
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, round(subtotal_galian, 0) ])
             if rows_galian:  # cek data galian tidak kosong
                 ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
             cur_row = cur_row + len(rows_galian) + 1  # Update nilai cur_row setelah add data galian
@@ -382,7 +382,7 @@ def jalan_paving_flow():
                 if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
                     subtotal_urugan += r[-1]
 
-            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_urugan])
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, round(subtotal_urugan, 0) ])
             if rows_urugan:  # cek data urugan tidak kosong
                 ws.merge_cells(start_row=cur_row, start_column=1, end_row=cur_row, end_column=7)       
             cur_row = cur_row + len(rows_urugan) + 1  # Update nilai cur_row setelah add data urugan
@@ -397,7 +397,7 @@ def jalan_paving_flow():
                 if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
                     subtotal_pemadatan += r[-1]
 
-            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_pemadatan])
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, round(subtotal_pemadatan, 0) ])
             if rows_pemadatan:  # cek data galian tidak kosong
                 ws.merge_cells(start_row=cur_row, start_column=1, end_row=cur_row, end_column=7)          
             cur_row = cur_row + len(rows_pemadatan) + 1  # Update nilai cur_row setelah add data Pemadatan
@@ -412,13 +412,13 @@ def jalan_paving_flow():
                 if  isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
                     subtotal_pemasangan_paving += r[-1]
 
-            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_pemasangan_paving])
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, round(subtotal_pemasangan_paving, 0) ])
             if rows_pemasangan_paving:  # cek data galian tidak kosong
                 ws.merge_cells(start_row=cur_row, start_column=1, end_row=cur_row, end_column=7)   
             cur_row = cur_row + len(rows_pemasangan_paving) + 1  # Update nilai cur_row setelah add data pemasangan paving
 
             total = subtotal_galian + subtotal_urugan + subtotal_pemadatan + subtotal_pemasangan_paving
-            ws.append(['TOTAL', np.nan, np.nan, np.nan, np.nan, total])
+            ws.append(['TOTAL', np.nan, np.nan, np.nan, np.nan, round(total, 0) ])
 
             # Convert workbook to BytesIO
             output = BytesIO()
