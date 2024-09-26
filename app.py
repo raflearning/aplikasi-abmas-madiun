@@ -18,7 +18,7 @@ def main():
     if 'saluran_drainase' not in st.session_state:
         st.session_state.saluran_drainase = None
 
-    menu = ["Home", "Jalan", "Saluran Drainase", "Estimasi RAB"]
+    menu = ["Home", "Jalan", "Saluran Drainase"]
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Home":
