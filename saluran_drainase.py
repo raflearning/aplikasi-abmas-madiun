@@ -476,7 +476,7 @@ def saluran_drainase_flow():
                 if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
                     subtotal_galian += r[-1]
             
-            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_galian])
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, round(subtotal_galian, 0) ])
             if rows_galian: # Cek data galian tidak kosong
                 ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
             cur_row = cur_row + len(rows_galian) + 1  # Update nilai cur_row setelah add data galian
@@ -490,7 +490,7 @@ def saluran_drainase_flow():
                 if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
                     subtotal_beton_a += r[-1]
             
-            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_beton_a])
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, round(subtotal_beton_a, 0) ])
             if rows_beton_a: # Cek data beton a tidak kosong
                 ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
             cur_row = cur_row + len(rows_beton_a) + 1  # Update nilai cur_row setelah add data beton a
@@ -504,7 +504,7 @@ def saluran_drainase_flow():
                 if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
                     subtotal_beton_b += r[-1]
             
-            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_beton_b])
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, round(subtotal_beton_b, 0) ])
             if rows_beton_b: # Cek data beton b tidak kosong
                 ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
             cur_row = cur_row + len(rows_beton_b) + 1  # Update nilai cur_row setelah add data beton b
@@ -518,7 +518,7 @@ def saluran_drainase_flow():
                 if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
                     subtotal_perancah_a += r[-1]
             
-            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_perancah_a])
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, round(subtotal_perancah_a, 0) ])
             if rows_perancah_a: # Cek data perancah a tidak kosong
                 ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
             cur_row = cur_row + len(rows_perancah_a) + 1  # Update nilai cur_row setelah add data perancah a
@@ -532,7 +532,7 @@ def saluran_drainase_flow():
                 if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
                     subtotal_perancah_b += r[-1]
             
-            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_perancah_b])
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, round(subtotal_perancah_b, 0) ])
             if rows_perancah_b: # Cek data perancah b tidak kosong
                 ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
             cur_row = cur_row + len(rows_perancah_b) + 1  # Update nilai cur_row setelah add data perancah b
@@ -546,7 +546,7 @@ def saluran_drainase_flow():
                 if isinstance(r[-1], (int, float)) and not np.isnan(r[-1]):
                     subtotal_urugan += r[-1]
             
-            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, subtotal_urugan])
+            ws.append(['subtotal', np.nan, np.nan, np.nan, np.nan, round(subtotal_urugan, 0)])
             if rows_urugan: # Cek data urugan tidak kosong
                 ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
             cur_row = cur_row + len(rows_urugan) + 1  # Update nilai cur_row setelah add data urugan
@@ -565,6 +565,10 @@ def saluran_drainase_flow():
                 ws.merge_cells(start_row=cur_row+1, start_column=1, end_row=cur_row+1, end_column=7)    
             cur_row = cur_row + len(rows_pemadatan) + 1  # Update nilai cur_row setelah add data pemadatan
 
+            # Total Data
+            total = subtotal_galian + subtotal_beton_a + subtotal_beton_b + subtotal_perancah_a + subtotal_perancah_b + subtotal_urugan + subtotal_pemadatan
+            ws.append(['TOTAL', np.nan, np.nan, np.nan, np.nan, round(total, 0) ])
+            
             # Convert workbook to BytesIO
             output = BytesIO()
             wb.save(output)
