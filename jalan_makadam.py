@@ -21,11 +21,11 @@ def jalan_makadam_flow():
     if st.button("Mulai Input"):
         st.session_state.jalan_makadam = {}
         st.session_state.show_galian_input = True
-        st.session_state.show_urugan_input = False
-        st.session_state.show_estimasi_input = False
+        st.session_state.show_urugan_input = True
+        st.session_state.show_estimasi_input = True
 
     # Bagian Galian
-    if st.session_state.get('show_galian_input', False):
+    if st.session_state.get('show_galian_input', True):
         st.write("### Pekerjaan Galian")
         jenis_galian = st.selectbox("Jenis Galian", ["Galian Batu", "Galian Tanah", "Galian Lumpur", "Galian Pasir", "Galian Cadas"])
         #metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"])
@@ -59,7 +59,7 @@ def jalan_makadam_flow():
                 # st.session_state.show_galian_input = False
 
     # Bagian Urugan
-    if st.session_state.get('show_urugan_input', False):
+    if st.session_state.get('show_urugan_input', True):
         st.write("### Pekerjaan Pemasangan Jalan Makadam")
         panjang_urugan = st.number_input("Panjang Urugan (m)", format="%.2f", min_value=0.0)
         lebar_urugan = st.number_input("Lebar Urugan (m)", format="%.2f", min_value=0.0)
@@ -262,7 +262,7 @@ def jalan_makadam_flow():
                 }
                 st.session_state.data_pemadatan = data_pemadatan
 
-    if st.session_state.get('show_estimasi_input', False):
+    if st.session_state.get('show_estimasi_input', True):
         if st.button("Hitung Estimasi"):
             df_galian = pd.DataFrame(st.session_state.data_galian)
             df_galian['Jumlah'] = df_galian['Volume'] * df_galian['Koefisien'] * df_galian['Harga Satuan']

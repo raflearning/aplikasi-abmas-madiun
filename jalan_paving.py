@@ -22,9 +22,9 @@ def jalan_paving_flow():
     if st.button("Mulai Input"):
         st.session_state.jalan_paving = {}
         st.session_state.show_galian_input = True
-        st.session_state.show_urugan_input = False
-        st.session_state.show_paving_input = False
-        st.session_state.show_estimasi_input = False
+        st.session_state.show_urugan_input = True
+        st.session_state.show_paving_input = True
+        st.session_state.show_estimasi_input = True
 
         st.session_state.rab_galian = None
         st.session_state.rab_pemadatan = None
@@ -32,7 +32,7 @@ def jalan_paving_flow():
         st.session_state.rab_urugan = None
 
     # Bagian Galian
-    if st.session_state.get('show_galian_input', False):
+    if st.session_state.get('show_galian_input', True):
         st.write("### Pekerjaan Galian")
         jenis_galian = st.selectbox("Jenis Galian", ["Galian Batu", "Galian Tanah", "Galian Lumpur", "Galian Pasir", "Galian Cadas"])
         metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"])
@@ -263,10 +263,10 @@ def jalan_paving_flow():
                 })
                 st.success("Input Galian disimpan! Lanjutkan ke Urugan.")
                 st.session_state.show_urugan_input = True
-                st.session_state.show_galian_input = False
+                st.session_state.show_galian_input = True
 
     # Bagian Urugan
-    if st.session_state.get('show_urugan_input', False):
+    if st.session_state.get('show_urugan_input', True):
         st.write("### Pekerjaan Urugan")
         panjang_urugan = st.number_input("Panjang Urugan (m)", format="%.2f")
         lebar_urugan = st.number_input("Lebar Urugan (m)", format="%.2f")
@@ -299,10 +299,10 @@ def jalan_paving_flow():
                 })
                 st.success("Input Urugan disimpan! Lanjutkan ke Pemasangan Paving.")
                 st.session_state.show_paving_input = True
-                st.session_state.show_urugan_input = False
+                st.session_state.show_urugan_input = True
 
     # Pemasangan Paving: This step is mandatory after both Galian and Urugan
-    if st.session_state.get('show_paving_input', False):
+    if st.session_state.get('show_paving_input', True):
         st.write("### Pemasangan Paving")
         panjang_paving = st.number_input("Panjang Daerah Paving (m)", format="%.2f", )
         lebar_paving = st.number_input("Lebar Daerah Paving (m)", format="%.2f")
@@ -331,10 +331,10 @@ def jalan_paving_flow():
             })
             st.success("Input Paving disimpan! Tekan tombol Submit untuk menyimpan semua data.")
             st.session_state.show_estimasi_input = True
-            st.session_state.show_paving_input = False
+            st.session_state.show_paving_input = True
 
     # Bagian Perhitungan Estimasi RAB
-    if st.session_state.get('show_estimasi_input', False):
+    if st.session_state.get('show_estimasi_input', True):
 
         st.write("### Perhitungan Estimasi RAB Pembuatan Jalan Paving")
 

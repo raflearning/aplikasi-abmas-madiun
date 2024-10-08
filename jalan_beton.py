@@ -24,9 +24,9 @@ def jalan_beton_flow():
     if st.button("Mulai Input"):
         st.session_state.jalan_beton = {}
         st.session_state.show_galian_input = True
-        st.session_state.show_urugan_input = False
-        st.session_state.show_beton_input = False
-        st.session_state.show_estimasi_input = False
+        st.session_state.show_urugan_input = True
+        st.session_state.show_beton_input = True
+        st.session_state.show_estimasi_input = True
 
         st.session_state.rab_galian = None
         st.session_state.rab_urugan = None
@@ -34,7 +34,7 @@ def jalan_beton_flow():
         st.session_state.rab_perancah = None
 
     # Bagian Galian
-    if st.session_state.get('show_galian_input', False):
+    if st.session_state.get('show_galian_input', True):
         st.write("### Pekerjaan Galian")
         jenis_galian = st.selectbox("Jenis Galian", ["Galian Batu", "Galian Tanah", "Galian Lumpur", "Galian Pasir", "Galian Cadas"])
         metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"])
@@ -266,11 +266,11 @@ def jalan_beton_flow():
                 })
                 st.success("Input Galian disimpan! Lanjutkan ke Urugan.")
                 st.session_state.show_urugan_input = True
-                st.session_state.show_galian_input = False        
+                st.session_state.show_galian_input = True        
 
 
     # Bagian Urugan
-    if st.session_state.get('show_urugan_input', False):
+    if st.session_state.get('show_urugan_input', True):
         st.write("### Pekerjaan Urugan")
         panjang_urugan = st.number_input("Panjang Urugan (m)", format="%.2f")
         lebar_urugan = st.number_input("Lebar Urugan (m)", format="%.2f")
@@ -303,10 +303,10 @@ def jalan_beton_flow():
                 })
                 st.success("Input Urugan disimpan! Lanjutkan ke Pemadatan Beton.")
                 st.session_state.show_beton_input = True
-                st.session_state.show_urugan_input = False
+                st.session_state.show_urugan_input = True
 
     # Bagian Pemadatan dan Pemasangan Beton
-    if st.session_state.get('show_beton_input', False):
+    if st.session_state.get('show_beton_input', True):
         st.write("### Pemadatan Beton")
         mutu_beton = st.selectbox("Mutu Beton", ["K125", "K150", "K175", "K225", "K250", "K300"])
         metode_pemadatan = st.selectbox("Pemadatan Beton", ["Manual", "Vibrator"])
@@ -361,10 +361,10 @@ def jalan_beton_flow():
                 'metode_perancah': metode_perancah})
             st.success("Input Beton disimpan! Tekan tombol Submit untuk menyimpan semua data.")
             st.session_state.show_estimasi_input = True
-            st.session_state.show_beton_input = False
+            st.session_state.show_beton_input = True
 
     # Bagian Perhitungan Estimasi RAB
-    if st.session_state.get('show_estimasi_input', False):
+    if st.session_state.get('show_estimasi_input', True):
         st.write("### Perhitungan Estimasi RAB Pembuatan Jalan Beton")
 
         if st.button("Hitung Estimasi"):
