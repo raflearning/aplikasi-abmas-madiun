@@ -21,11 +21,11 @@ def saluran_drainase_flow():
     if st.button("Mulai Input"):
         st.session_state.jalan_beton = {}
         st.session_state.show_galian_input = True
-        st.session_state.show_beton_a_input = True
-        st.session_state.show_beton_b_input = True
-        st.session_state.show_urugan_input = True
-        st.session_state.show_pemadatan_input = True
-        st.session_state.show_estimasi_input = True
+        st.session_state.show_beton_a_input = False
+        st.session_state.show_beton_b_input = False
+        st.session_state.show_urugan_input = False
+        st.session_state.show_pemadatan_input = False
+        st.session_state.show_estimasi_input = False
 
         st.session_state.rab_galian = None
         st.session_state.rab_beton_a = None
@@ -37,7 +37,7 @@ def saluran_drainase_flow():
         
 
     # Bagian Galian
-    if st.session_state.get('show_galian_input', True):
+    if st.session_state.get('show_galian_input', False):
         st.write("### Pekerjaan Galian")
         jenis_galian = st.selectbox("Jenis Galian", ["Galian Batu", "Galian Tanah", "Galian Lumpur", "Galian Pasir", "Galian Cadas"])
         metode = st.radio("Metode Pekerjaan", ["Manual", "Mekanis", "Semi Mekanis"])
@@ -269,10 +269,10 @@ def saluran_drainase_flow():
                 })
                 st.success("Input Galian disimpan! Lanjutkan ke Beton Sisi A.")
                 st.session_state.show_beton_a_input = True
-                st.session_state.show_galian_input = True        
+                st.session_state.show_galian_input = False        
 
     #Bagian Beton A
-    if st.session_state.get('show_beton_a_input', True):
+    if st.session_state.get('show_beton_a_input', False):
         st.write("### Pembuatan Beton Darinase Bagian (A)")
         mutu_beton = st.selectbox("Mutu Beton", ["K125", "K150", "K175", "K225", "K250", "K300"], key = 'mutua')
         metode_perancah = st.selectbox("Bekisting & Perancah", ["Kayu Jawa", "Dolken", "Bambu"], key = 'perancaha')
@@ -333,10 +333,10 @@ def saluran_drainase_flow():
                 'metode_perancah': metode_perancah})
             st.success("Input Beton Sisi A disimpan! Lanjut ke Beton Sisi B")
             st.session_state.show_beton_b_input = True
-            st.session_state.show_beton_a_input = True
+            st.session_state.show_beton_a_input = False
 
     #Bagian Beton B
-    if st.session_state.get('show_beton_b_input', True):
+    if st.session_state.get('show_beton_b_input', False):
         st.write("### Pembuatan Beton Darinase Bagian (B)")
         mutu_beton = st.selectbox("Mutu Beton", ["K125", "K150", "K175", "K225", "K250", "K300"], key = 'mutub')
         metode_perancah = st.selectbox("Bekisting & Perancah", ["Kayu Jawa", "Dolken", "Bambu"], key = 'perancahb')
@@ -397,10 +397,10 @@ def saluran_drainase_flow():
                 'metode_perancah': metode_perancah})
             st.success("Input Pembuatan Beton Sisi B disimpan! Lanjut ke Urugan")
             st.session_state.show_urugan_input = True
-            st.session_state.show_beton_b_input = True
+            st.session_state.show_beton_b_input = False
 
     # Bagian Urugan
-    if st.session_state.get('show_urugan_input', True):
+    if st.session_state.get('show_urugan_input', False):
         st.write("### Pekerjaan Urugan")
         panjang_urugan = st.number_input("Panjang Urugan (m)", format="%.2f")
         lebar_urugan = st.number_input("Lebar Urugan (m)", format="%.2f")
@@ -433,10 +433,10 @@ def saluran_drainase_flow():
                 })
                 st.success("Input Urugan disimpan! Dapatkan Estimasinya.")
                 st.session_state.show_estimasi_input = True
-                st.session_state.show_urugan_input = True
+                st.session_state.show_urugan_input = False
 
     # Bagian Perhitungan Estimasi RAB
-    if st.session_state.get('show_estimasi_input', True):
+    if st.session_state.get('show_estimasi_input', False):
         st.write("### Perhitungan Estimasi RAB Pembuatan Saluran")
 
         if st.button("Hitung Estimasi"):
